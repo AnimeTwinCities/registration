@@ -269,12 +269,14 @@
     };
 
     var removeValueFromArray = function(array, value) {
-        var index = array.indexOf(parseInt(value));
-        if (index > -1) {
-            array = array.splice((index+1), 1);
+        var newArray = [];
+        for (var i = 0, length = array.length; i < length; i++) {
+            if (parseInt(value) !== array[i]) {
+                newArray.push(array[i])
+            }
         }
 
-        return array;
+        return newArray;
     };
 
     var deletePricePoint = function(pricingKey, badgeType) {
@@ -301,13 +303,6 @@
             deletePricePoint(pricingKey, badgeType);
         });
     });
-
-    // Array Remove - By John Resig (MIT Licensed)
-    Array.prototype.remove = function(from, to) {
-        var rest = this.slice((to || from) + 1 || this.length);
-        this.length = from < 0 ? this.length + from : from;
-        return this.push.apply(this, rest);
-    };
 </script>
 <style>
     .pricingBlock {
