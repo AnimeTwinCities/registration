@@ -29,7 +29,7 @@ class PricingRepository extends EntityRepository
             $event = $this->getEntityManager()->getRepository(Event::class)->getSelectedEvent();
         }
 
-        $pricing = $this->findBy(['badgeType' => $badgeType, 'event' => $event]);
+        $pricing = $this->findBy(['badgeType' => $badgeType, 'event' => $event], ['pricingBegin' => 'ASC']);
 
         return $pricing;
     }

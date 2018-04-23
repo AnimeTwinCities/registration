@@ -15,6 +15,8 @@ use AppBundle\Entity\Pricing;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PricingController extends Controller
@@ -43,30 +45,10 @@ class PricingController extends Controller
                 'color' => $badgeType->getColor(),
                 'name' => $badgeType->getDescription(),
             ];
-            $pricing = $this->getDoctrine()->getRepository(Pricing::class)->getPricingForBadgeType($badgeType);
 
-            $pricingArray = [];
-            $pricingKeys = [];
-            foreach ($pricing as $price) {
-                $tmp = [
-                    'id' => $price->getId(),
-                    'start' => $price->getPricingBegin()->format('U'),
-                    'end' => $price->getPricingEnd()->format('U'),
-                    'currency' => $price->getCurrency(),
-                    'price' => $price->getPrice(),
-                    'description' => $price->getDescription(),
-                ];
-                $pricingArray[$price->getPricingBegin()->format('U')] = $tmp;
-                $pricingKeys[] = (int) $price->getPricingBegin()->format('U');
-            }
+            $parameters['pricing'][$badgeType->getName()] = $this->getPricingDataForBadgeType($badgeType);
 
-            $tmp = [
-                'pricing' => $pricingArray,
-                'pricingKeys' => $pricingKeys,
-            ];
-            $parameters['pricing'][$badgeType->getName()] = $tmp;
-
-            if (count($pricingArray) > 0) {
+            if (count($parameters['pricing'][$badgeType->getName()]['pricing']) > 0) {
                 $parameters['displayBadgeTypes'][] = $badgeType;
             } else {
                 $emptyBadgeTypes[] = $badgeType;
@@ -78,5 +60,168 @@ class PricingController extends Controller
         }
 
         return $this->render('pricing/pricingEditor.html.twig', $parameters);
+    }
+
+    /**
+     * @param int $id
+     * @Route("/pricing/delete/{id}", name="pricingDelete")
+     * @Route("/pricing/delete/", name="pricingDelete_Slash")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @return JsonResponse
+     */
+    public function pricingDelete($id)
+    {
+        $returnData  = [
+            'success' => false,
+        ];
+        try {
+            $em = $this->getDoctrine()->getManager();
+
+            $pricing = $em->getRepository(Pricing::class)->find($id);
+            $badgeType = $pricing->getBadgeType();
+
+            $em->remove($pricing);
+            $em->flush();
+
+            $returnData['success'] = true;
+            $returnData['badgeTypeName'] = $badgeType->getName();
+            $returnData['data'] = $this->getPricingDataForBadgeType($badgeType);
+        } catch (\Exception $e) {
+            $returnData['message'] = $e->getMessage();
+        }
+
+        return new JsonResponse($returnData);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @Route("/pricing/edit/{id}", name="pricingEdit")
+     * @Route("/pricing/edit/", name="pricingEdit_Slash")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @return JsonResponse
+     */
+    public function pricingEdit(Request $request, $id)
+    {
+        $returnData  = [
+            'success' => false,
+        ];
+        try {
+            if (!$request->request->has('priceStart')
+                || !$request->request->has('priceEnd')
+                || !$request->request->has('price')
+                || !$request->request->has('description')
+            ) {
+                throw new \Exception('Missing required fields to save data');
+            }
+            $em = $this->getDoctrine()->getManager();
+
+            $priceStart = $request->request->get('priceStart');
+            $priceEnd = $request->request->get('priceEnd');
+            $price = $request->request->get('price');
+            $description = $request->request->get('description');
+
+            $pricing = $em->getRepository(Pricing::class)->find($id);
+            $badgeType = $pricing->getBadgeType();
+
+            //TODO: verify no pricing overlap
+
+            $pricing->setPricingBegin(new \DateTime($priceStart));
+            $pricing->setPricingEnd(new \DateTime($priceEnd));
+            $pricing->setPrice((int)$price);
+            $pricing->setDescription($description);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $returnData['success'] = true;
+            $returnData['badgeTypeName'] = $badgeType->getName();
+            $returnData['data'] = $this->getPricingDataForBadgeType($badgeType);
+        } catch (\Exception $e) {
+            $returnData['message'] = $e->getMessage();
+        }
+
+        return new JsonResponse($returnData);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/pricing/add", name="pricingAdd")
+     * @Security("has_role('ROLE_ADMIN')")
+     * @return JsonResponse
+     */
+    public function pricingAdd(Request $request)
+    {
+        $returnData  = [
+            'success' => false,
+        ];
+        try {
+            if (!$request->request->has('badgeType')
+                || !$request->request->has('priceStart')
+                || !$request->request->has('priceEnd')
+                || !$request->request->has('price')
+                || !$request->request->has('description')
+            ) {
+                throw new \Exception('Missing required fields to save data');
+            }
+
+            $badgeTypeName = $request->request->get('badgeType');
+            $priceStart = $request->request->get('priceStart');
+            $priceEnd = $request->request->get('priceEnd');
+            $price = $request->request->get('price');
+            $description = $request->request->get('description');
+
+            $event = $this->getDoctrine()->getRepository(Event::class)->getSelectedEvent();
+            $badgeType = $this->getDoctrine()->getRepository(BadgeType::class)->getBadgeTypeFromType($badgeTypeName);
+
+            //TODO: verify no pricing overlap
+
+            $pricing = new Pricing();
+            $pricing->setEvent($event);
+            $pricing->setBadgeType($badgeType);
+            $pricing->setPricingBegin(new \DateTime($priceStart));
+            $pricing->setPricingEnd(new \DateTime($priceEnd));
+            $pricing->setPrice((int)$price);
+            $pricing->setDescription($description);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($pricing);
+            $em->flush();
+
+            $returnData['success'] = true;
+            $returnData['badgeTypeName'] = $badgeType->getName();
+            $returnData['data'] = $this->getPricingDataForBadgeType($badgeType);
+        } catch (\Exception $e) {
+            $returnData['message'] = $e->getMessage();
+        }
+
+        return new JsonResponse($returnData);
+    }
+
+    /**
+     * @param BadgeType $badgeType
+     * @return mixed[]
+     */
+    private function  getPricingDataForBadgeType(BadgeType $badgeType) : array
+    {
+        $pricing = $this->getDoctrine()->getRepository(Pricing::class)->getPricingForBadgeType($badgeType);
+
+        $pricingArray = [];
+        $pricingKeys = [];
+        foreach ($pricing as $price) {
+            $tmp = [
+                'id' => $price->getId(),
+                'start' => $price->getPricingBegin()->format('U'),
+                'end' => $price->getPricingEnd()->format('U'),
+                'currency' => $price->getCurrency(),
+                'price' => $price->getPrice(),
+                'description' => $price->getDescription(),
+            ];
+            $pricingArray[$price->getPricingBegin()->format('U')] = $tmp;
+            $pricingKeys[] = (int) $price->getPricingBegin()->format('U');
+        }
+
+        return [
+            'pricing' => $pricingArray,
+            'pricingKeys' => $pricingKeys,
+        ];
     }
 }

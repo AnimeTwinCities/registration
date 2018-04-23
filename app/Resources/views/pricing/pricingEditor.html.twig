@@ -81,7 +81,7 @@
                     <div class="col-md-12">
                         <div class="md-form">
                             <input type="date" id="priceStart" name="priceStart" class="form-control">
-                            <label for="name" class="active">Start Date</label>
+                            <label for="name" class="active" id="priceStartLabel" name="priceStartLabel">Start Date</label>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <div class="col-md-12">
                         <div class="md-form">
                             <input type="date" id="priceEnd" name="priceEnd" class="form-control">
-                            <label for="name" class="active">End Date</label>
+                            <label for="name" class="active" id="priceEndLabel" name="priceEndLabel">End Date</label>
                         </div>
                     </div>
                 </div>
@@ -110,12 +110,25 @@
                     </div>
                 </div>
 
+                <div class="row" id="errorRow" style="display: none">
+                    <div class="col-md-12">
+                        <div class="card red lighten-1 text-center z-depth-2">
+                            <div class="card-body">
+                                <p class="white-text mb-0" id="errorMessage">
+                                    There was an error
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="text-center py-4 mt-3">
                             <input type="hidden" id="currentBadgeType" name="currentBadgeType" value="">
                             <input type="hidden" id="currentPricingKey" name="currentPricingKey" value="">
-                            <button id="editorSave" class="btn btn-warning btn-sm" type="button">Add</button>
+                            <button id="editorNew" class="btn btn-warning btn-sm" type="button">Add</button>
+                            <button id="editorEdit" class="btn btn-warning btn-sm" type="button" style="display: none">Edit</button>
                             <button id="editorCancel" class="btn btn-grey btn-sm" type="button">Cancel</button>
                             <button id="editorDelete" class="btn btn-danger btn-sm" type="button" style="display: none">Delete</button>
                         </div>
@@ -134,12 +147,6 @@
     var badgeTypes = {{ badgeTypeNames|json_encode|raw }};
     var badgeDescription = {{ badgeTypeDescriptions|json_encode|raw }};
     var pricing = {{ pricing|json_encode|raw }};
-
-     var getRandomizer = function(bottom, top) {
-        return function() {
-            return Math.floor( Math.random() * ( 1 + top - bottom ) );
-        }
-    };
 
     var addBlankPanel = function(badgeName, start, end, count) {
         addPanel(badgeName, start, end, count, 'blank');
@@ -192,25 +199,31 @@
             type: type
         }, function( event ) {
             var fieldPriceStart = $('#priceStart');
+            var fieldPriceStartLabel = $('#priceStartLabel');
             var fieldPriceEnd = $('#priceEnd');
+            var fieldPriceEndLabel = $('#priceEndLabel');
             var fieldPrice = $('#price');
             var labelPrice = $('#priceLabel');
             var fieldDescription = $('#description');
             var labelDescription = $('#descriptionLabel');
-            var editorSave = $('#editorSave');
+            var editorNew = $('#editorNew');
+            var editorEdit = $('#editorEdit');
             var editorDelete = $('#editorDelete');
 
             $('#currentPricingKey').val(pricingKey);
             $('#currentBadgeType').val(event.data.badgeName);
 
             var header = 'New ' + badgeDescription[event.data.badgeName]['name'] + ' price';
+            fieldPriceStartLabel.html("Start Date (Min: "+epochToDateFieldLabelFormatted(event.data.priceStart)+")");
+            fieldPriceEndLabel.html("End Date (Max: "+epochToDateFieldLabelFormatted(event.data.priceEnd)+")");
             fieldPriceStart.val('');
             fieldPriceEnd.val('');
             fieldPrice.val('');
             fieldDescription.val('');
             labelPrice.removeClass('active');
             labelDescription.removeClass('active');
-            editorSave.html('Add');
+            editorNew.show();
+            editorEdit.hide();
             editorDelete.hide();
             if (type !== 'blank') {
                 header = 'Edit ' + badgeDescription[event.data.badgeName]['name'] + ' price';
@@ -220,7 +233,8 @@
                 labelPrice.addClass('active');
                 fieldDescription.val(event.data.description);
                 labelDescription.addClass('active');
-                editorSave.html('Save');
+                editorNew.hide();
+                editorEdit.show();
                 editorDelete.show();
             }
 
@@ -236,6 +250,15 @@
         var day = padZeroLeft(date.getDate());
 
         return year + '-' + month + '-' + day;
+    };
+
+    var epochToDateFieldLabelFormatted = function(epochTime) {
+        var date = new Date(epochTime*1000);
+        var year = date.getFullYear();
+        var month = padZeroLeft(date.getMonth() + 1);
+        var day = padZeroLeft(date.getDate());
+
+        return month + '/' + day + '/' + year;
     };
 
     var padZeroLeft = function(original) {
@@ -268,23 +291,17 @@
         }
     };
 
-    var removeValueFromArray = function(array, value) {
-        var newArray = [];
-        for (var i = 0, length = array.length; i < length; i++) {
-            if (parseInt(value) !== array[i]) {
-                newArray.push(array[i])
-            }
+    var processDone = function (data)
+    {
+        if (data.success) {
+            var tmpBadgeType = data.badgeTypeName;
+            pricing[tmpBadgeType] = data.data;
+            displayPricingForBadgeType(tmpBadgeType);
+            $('#editorPanel').hide();
+        } else {
+            $('#errorMessage').html(data.message);
+            $('#errorRow').show();
         }
-
-        return newArray;
-    };
-
-    var deletePricePoint = function(pricingKey, badgeType) {
-        var badgePricing = pricing[badgeType];
-        pricing[badgeType]["pricingKeys"] = removeValueFromArray(badgePricing["pricingKeys"], pricingKey);
-        delete badgePricing["pricing"][pricingKey];
-        displayPricingForBadgeType(badgeType);
-        $('#editorPanel').hide();
     };
 
     $( document ).ready(function() {
@@ -300,7 +317,75 @@
         $('#editorDelete').click(function() {
             var pricingKey = $('#currentPricingKey').val();
             var badgeType = $('#currentBadgeType').val();
-            deletePricePoint(pricingKey, badgeType);
+
+            var id = pricing[badgeType]["pricing"][pricingKey]["id"];
+
+            $.post( "{{ path("pricingDelete_Slash") }}"+id, {})
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
+        });
+
+        $('#editorNew').click(function() {
+            $('#errorRow').hide();
+
+            var badgeType = $('#currentBadgeType').val();
+            var priceStart = $('#priceStart').val();
+            var priceEnd = $('#priceEnd').val();
+            var price = $('#price').val();
+            var description = $('#description').val();
+
+            $.post( "{{ path("pricingAdd") }}",
+                {
+                    badgeType: badgeType,
+                    priceStart: priceStart,
+                    priceEnd: priceEnd,
+                    price: price,
+                    description: description
+                })
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
+        });
+
+        $('#editorEdit').click(function() {
+            $('#errorRow').hide();
+
+            var pricingKey = $('#currentPricingKey').val();
+            var badgeType = $('#currentBadgeType').val();
+
+            var id = pricing[badgeType]["pricing"][pricingKey]["id"];
+
+            var priceStart = $('#priceStart').val();
+            var priceEnd = $('#priceEnd').val();
+            var price = $('#price').val();
+            var description = $('#description').val();
+
+            $.post( "{{ path("pricingEdit_Slash") }}" + id,
+                {
+                    priceStart: priceStart,
+                    priceEnd: priceEnd,
+                    price: price,
+                    description: description
+                })
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
         });
     });
 </script>
