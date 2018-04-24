@@ -33,4 +33,40 @@ class PricingRepository extends EntityRepository
 
         return $pricing;
     }
+
+    /**
+     * @param BadgeType $badgeType
+     * @param \DateTime $date
+     * @param Pricing $pricing
+     * @return bool
+     */
+    public function isValidPricePoint(BadgeType $badgeType, \DateTime $date, ?Pricing $pricing = null) : bool
+    {
+        $event = $this->getEntityManager()->getRepository(Event::class)->getSelectedEvent();
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('p')
+            ->from(Pricing::class, 'p')
+            ->where("p.event = :event")
+            ->andWhere("p.badgeType = :badgeType")
+            ->andWhere("p.pricingBegin < :date1")
+            ->andWhere("p.pricingEnd > :date2")
+            ->setParameter('event', $event)
+            ->setParameter('badgeType', $badgeType)
+            ->setParameter('date1', $date)
+            ->setParameter('date2', $date);
+
+        if ($pricing) {
+            $queryBuilder->andWhere('p.id != :pricing')
+                ->setParameter(':pricing', $pricing);
+        }
+
+        $results = $queryBuilder->getQuery()->getResult();
+
+        if (count($results) > 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
