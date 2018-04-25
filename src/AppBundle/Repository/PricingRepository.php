@@ -61,6 +61,14 @@ class PricingRepository extends EntityRepository
                 ->setParameter(':pricing', $pricing);
         }
 
+        if ($date->format('U') < $event->getPreRegistrationStart()->format('U')) {
+            return false;
+        }
+
+        if ($date->format('U') > $event->getPreRegistrationEnd()->format('U')) {
+            return false;
+        }
+
         $results = $queryBuilder->getQuery()->getResult();
 
         if (count($results) > 0) {

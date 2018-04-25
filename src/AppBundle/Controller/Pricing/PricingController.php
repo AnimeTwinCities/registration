@@ -30,9 +30,13 @@ class PricingController extends Controller
     {
         $parameters = [];
 
-        $parameters['event'] = $this->getDoctrine()->getRepository(Event::class)->getSelectedEvent();
+        $parameters['event'] = $this->getDoctrine()
+            ->getRepository(Event::class)
+            ->getSelectedEvent();
 
-        $parameters['badgeTypes'] = $this->getDoctrine()->getRepository(BadgeType::class)->findBy([], ['description' => 'ASC']);
+        $parameters['badgeTypes'] = $this->getDoctrine()
+            ->getRepository(BadgeType::class)
+            ->findBy([], ['description' => 'ASC']);
 
         $parameters['pricing'] = [];
         $parameters['badgeTypeNames'] = [];
@@ -131,14 +135,14 @@ class PricingController extends Controller
                 ->getRepository(Pricing::class)
                 ->isValidPricePoint($badgeType, $startDateTime, $pricing);
             if (!$isValidPricePoint) {
-                throw new \Exception('Invalid Start Price');
+                throw new \Exception('Invalid Start Date');
             }
 
             $isValidPricePoint = $this->getDoctrine()
                 ->getRepository(Pricing::class)
                 ->isValidPricePoint($badgeType, $endDateTime, $pricing);
             if (!$isValidPricePoint) {
-                throw new \Exception('Invalid End Price');
+                throw new \Exception('Invalid End Date');
             }
 
             $pricing->setPricingBegin($startDateTime);
@@ -185,6 +189,10 @@ class PricingController extends Controller
             $price = $request->request->get('price');
             $description = $request->request->get('description');
 
+            if ($price < 0) {
+                throw new \Exception('Price must be a positive value.');
+            }
+
             $startDateTime = new \DateTime($priceStart);
             $endDateTime = new \DateTime($priceEnd);
 
@@ -195,14 +203,14 @@ class PricingController extends Controller
                 ->getRepository(Pricing::class)
                 ->isValidPricePoint($badgeType, $startDateTime);
             if (!$isValidPricePoint) {
-                throw new \Exception('Invalid Start Price');
+                throw new \Exception('Invalid Start Date');
             }
 
             $isValidPricePoint = $this->getDoctrine()
                 ->getRepository(Pricing::class)
                 ->isValidPricePoint($badgeType, $endDateTime);
             if (!$isValidPricePoint) {
-                throw new \Exception('Invalid End Price');
+                throw new \Exception('Invalid End Date');
             }
 
             $pricing = new Pricing();

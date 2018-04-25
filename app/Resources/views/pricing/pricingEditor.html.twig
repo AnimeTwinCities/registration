@@ -59,7 +59,7 @@
                         <th style="width:20%">Badge Type</th>
                         <th style="width:20%" class="text-left">|<-- {{ event.preRegistrationStart|date('M jS Y') }}</th>
                         <th style="width:40%" class="text-center">Schedule</th>
-                        <th style="width:20%" class="text-right">{{ event.endDate|date('M jS Y') }} -->|</th>
+                        <th style="width:20%" class="text-right">{{ event.preRegistrationEnd|date('M jS Y') }} -->|</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,7 +142,7 @@
 
 <script>
     var pricingStart = {{ event.preRegistrationStart|date('U') }};
-    var pricingEnd = {{ event.endDate|date('U') }};
+    var pricingEnd = {{ event.preRegistrationEnd|date('U') }};
     var maxTime = pricingEnd - pricingStart;
     var badgeTypes = {{ badgeTypeNames|json_encode|raw }};
     var badgeDescription = {{ badgeTypeDescriptions|json_encode|raw }};
