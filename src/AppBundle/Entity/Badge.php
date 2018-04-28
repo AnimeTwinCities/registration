@@ -190,7 +190,7 @@ class Badge
      *
      * @return Badge
      */
-    public function setBadgestatus(BadgeStatus $badgeStatus = null)
+    public function setBadgeStatus(BadgeStatus $badgeStatus = null)
     {
         $this->badgeStatus = $badgeStatus;
 

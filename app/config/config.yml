@@ -117,7 +117,8 @@ easy_admin:
         color_scheme: 'light'
         menu:
             - { route: 'homepage', label: 'Return to Registration Db', icon: 'arrow-left' }
-            - { entity: 'EventBadgeType', icon: 'id-badge' }
+            - { entity: 'BadgeType', icon: 'id-badge' }
+            - { entity: 'EventBadgeType', icon: 'id-card' }
             - label: 'IT'
               icon: 'laptop'
               children:

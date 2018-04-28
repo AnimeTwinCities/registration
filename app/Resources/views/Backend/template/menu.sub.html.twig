@@ -25,9 +25,9 @@
     {% endif %}
     {% if section.items|length > 1 %}
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdownMenuLink_{{ section.name }}"
+            <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdownMenuLink_{{ section.name|striptags }}"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ section.name }}
+                {{ section.name|raw }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 {% for item in section.items if is_granted(item.access) %}
@@ -38,11 +38,3 @@
     {% endif %}
     </li>
 {% endfor %}
-{% if is_granted('ROLE_ADMIN') %}
-    <li class="nav-item">
-        <a class="nav-link waves-effect waves-dark" href="{{ url('admin') }}">
-            <i class="fas fa-cogs"></i>
-            Admin
-        </a>
-    </li>
-{% endif %}

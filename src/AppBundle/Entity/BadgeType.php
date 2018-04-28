@@ -40,6 +40,27 @@ class BadgeType
     private $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     */
+    private $color;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="staff", type="boolean", length=255, nullable=false)
+     */
+    private $staff = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sponsor", type="boolean", length=255, nullable=false)
+     */
+    private $sponsor = '0';
+
+    /**
      * One Product has Many Features.
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\EventBadgeType", mappedBy="badgeType")
      */
@@ -95,6 +116,42 @@ class BadgeType
     }
 
     /**
+     * @return int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get modifiedDate
+     *
+     * @return \DateTime
+     */
+    public function getModifiedDate()
+    {
+        return $this->modifiedDate;
+    }
+
+    /**
+     * Get badgeTypeId
+     *
+     * @return integer
+     */
+    public function getBadgeTypeId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -140,6 +197,54 @@ class BadgeType
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor(?string $color): void
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStaff(): bool
+    {
+        return $this->staff;
+    }
+
+    /**
+     * @param bool $staff
+     */
+    public function setStaff(bool $staff): void
+    {
+        $this->staff = $staff;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSponsor(): bool
+    {
+        return $this->sponsor;
+    }
+
+    /**
+     * @param bool $sponsor
+     */
+    public function setSponsor(bool $sponsor): void
+    {
+        $this->sponsor = $sponsor;
     }
 
     /**
@@ -204,26 +309,6 @@ class BadgeType
         $this->modifiedDate = $modifiedDate;
 
         return $this;
-    }
-
-    /**
-     * Get modifiedDate
-     *
-     * @return \DateTime
-     */
-    public function getModifiedDate()
-    {
-        return $this->modifiedDate;
-    }
-
-    /**
-     * Get badgeTypeId
-     *
-     * @return integer
-     */
-    public function getBadgeTypeId()
-    {
-        return $this->id;
     }
 
     /**

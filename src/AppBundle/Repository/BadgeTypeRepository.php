@@ -35,4 +35,38 @@ class BadgeTypeRepository extends EntityRepository
             return null;
         }
     }
+
+    /**
+     * @return BadgeType
+     */
+    public function getStaffBadgeType()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->select('bt')
+            ->from(BadgeType::class, 'bt')
+            ->where("bt.staff = :staff")
+            ->setParameter('staff', true);
+
+        try {
+            return $queryBuilder->getQuery()->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return BadgeType[]
+     */
+    public function findSponsorBadgeTypes()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->select('bt')
+            ->from(BadgeType::class, 'bt')
+            ->where("bt.sponsor = :sponsor")
+            ->setParameter('sponsor', true);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

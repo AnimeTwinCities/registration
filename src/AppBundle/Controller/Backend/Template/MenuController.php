@@ -93,6 +93,21 @@ class MenuController extends Controller
                         ],
                     ]
                 ],
+                [
+                    'name' => '<i class="fas fa-cogs"></i> Admin',
+                    'items' => [
+                        [
+                            'title' => 'Set Pricing',
+                            'url' => 'pricing',
+                            'access' => 'ROLE_ADMIN',
+                        ],
+                        [
+                            'title' => 'Admin',
+                            'url' => 'admin',
+                            'access' => 'ROLE_ADMIN',
+                        ],
+                    ]
+                ]
             ];
         }
 

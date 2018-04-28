@@ -1,0 +1,26 @@
+easy_admin:
+    entities:
+        BadgeType:
+            disabled_actions: ['delete']
+            label: 'Badge Types'
+            class: AppBundle\Entity\BadgeType
+            list:
+                title: 'Badge Types'
+                sort: 'description'
+                search:
+                    sort: ['description', 'DESC']
+                fields:
+                    - name
+                    - description
+                    - color
+                    - { property: 'staff', type: 'boolean' }
+                    - { property: 'sponsor', type: 'boolean' }
+            form:
+                actions:
+                    - { name: 'makeStaff', label: 'Make Active Staff Badge', css_class: 'btn btn-info', icon: 'exclamation-triangle' }
+                fields:
+                fields:
+                    - name
+                    - description
+                    - { property: 'color', type_options: { required: false } }
+                    - { property: 'sponsor', type_options: { required: false } }

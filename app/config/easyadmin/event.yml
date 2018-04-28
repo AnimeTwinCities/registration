@@ -9,10 +9,13 @@ easy_admin:
                     - { property: 'year' }
                     - { property: 'startDate', format: 'M jS Y', type_options: { required: true } }
                     - { property: 'endDate', format: 'M jS Y', type_options: { required: true } }
+                    - { property: 'preRegistrationStart', format: 'M jS Y', type_options: { required: false } }
+                    - { property: 'preRegistrationEnd', format: 'M jS Y', type_options: { required: false } }
                     - { property: 'attendanceCap' }
+                    - { property: 'active', type: 'boolean' }
             form:
                 actions:
-                    - { name: 'makeActive', icon: 'plus-square' }
+                    - { name: 'makeActive', label: 'Make Active Year', css_class: 'btn btn-info', icon: 'calendar' }
                 fields:
                     - { property: 'year' }
                     - {
@@ -22,6 +25,16 @@ easy_admin:
                       }
                     - {
                         property: 'endDate',
+                        format: 'n/j/Y',
+                        type: 'date'
+                      }
+                    - {
+                        property: 'preRegistrationStart',
+                        format: 'n/j/Y',
+                        type: 'date'
+                      }
+                    - {
+                        property: 'preRegistrationEnd',
                         format: 'n/j/Y',
                         type: 'date'
                       }

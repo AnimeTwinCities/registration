@@ -1,0 +1,398 @@
+{##
+ # Copyright (c) 2018. Anime Twin Cities, Inc.
+ #
+ # This project, including all of the files and their contents, is licensed under the terms of MIT License
+ #
+ # See the LICENSE file in the root of this project for details.
+#}
+{% extends 'detour.html.twig' %}
+
+{% block body %}
+<div class="container bg-white">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Pricing Editor for {{ event.year }}</h2>
+        </div>
+    </div>
+    {% if event.preRegistrationStart is null or event.preRegistrationEnd is null %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card text-center w-100">
+                <div class="card-header danger-color-dark white-text">
+                    Selected Event Year missing settings
+                </div>
+                <div class="card-body">
+                    <a href="{{ path('admin') }}">
+                        <h4 class="card-title danger-text">
+                            Edit current selected({{ event.year }}) event
+                        </h4>
+                    </a>
+                    <p class="card-text">
+                        Event does not have Pre-Registration Start/End configured. These must be set to set pricing data.
+                    </p>
+                </div>
+                <div class="card-footer text-muted danger-color-dark white-text">
+                    <p class="mb-0">
+
+                    </p>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    {% else %}
+    {#
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Pre-registration: {{ event.preRegistrationStart|date('M jS Y') }}
+                - {{ event.preRegistrationEnd|date('M jS Y')}}</h3>
+        </div>
+    </div>
+    <br>
+    #}
+
+    <div class="row">
+        <div class="col-sm-8">
+            <table class="table table-striped table-sm">
+                <thead class="unique-color">
+                    <tr class="text-white">
+                        <th style="width:20%">Badge Type</th>
+                        <th style="width:20%" class="text-left">|<-- {{ event.preRegistrationStart|date('M jS Y') }}</th>
+                        <th style="width:40%" class="text-center">Schedule</th>
+                        <th style="width:20%" class="text-right">{{ event.preRegistrationEnd|date('M jS Y') }} -->|</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for badgeType in displayBadgeTypes %}
+                    <tr id="badgeType_row_{{ badgeType.name }}">
+                        <td>{{ badgeType.description }}</td>
+                        <td colspan="3" id="badgeType_td_{{ badgeType.name }}">
+                        <td colspan="3" id="badgeType_td_{{ badgeType.name }}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-4" id="editorPanel" style="display: none">
+            <div id="editorHeader" class="unique-color text-white" style="padding: .45rem; font-weight: bolder"></div>
+            <form>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <input type="date" id="priceStart" name="priceStart" class="form-control">
+                            <label for="name" class="active" id="priceStartLabel" name="priceStartLabel">Start Date</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <input type="date" id="priceEnd" name="priceEnd" class="form-control">
+                            <label for="name" class="active" id="priceEndLabel" name="priceEndLabel">End Date</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <input type="number" id="price" name="price" class="form-control">
+                            <label for="name" id="priceLabel">Price (in USD)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <input type="text" id="description" name="description" class="form-control">
+                            <label for="name" id="descriptionLabel">Description</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="errorRow" style="display: none">
+                    <div class="col-md-12">
+                        <div class="card red lighten-1 text-center z-depth-2">
+                            <div class="card-body">
+                                <p class="white-text mb-0" id="errorMessage">
+                                    There was an error
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center py-4 mt-3">
+                            <input type="hidden" id="currentBadgeType" name="currentBadgeType" value="">
+                            <input type="hidden" id="currentPricingKey" name="currentPricingKey" value="">
+                            <button id="editorNew" class="btn btn-warning btn-sm" type="button">Add</button>
+                            <button id="editorEdit" class="btn btn-warning btn-sm" type="button" style="display: none">Edit</button>
+                            <button id="editorCancel" class="btn btn-grey btn-sm" type="button">Cancel</button>
+                            <button id="editorDelete" class="btn btn-danger btn-sm" type="button" style="display: none">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    var pricingStart = {{ event.preRegistrationStart|date('U') }};
+    var pricingEnd = {{ event.preRegistrationEnd|date('U') }};
+    var maxTime = pricingEnd - pricingStart;
+    var badgeTypes = {{ badgeTypeNames|json_encode|raw }};
+    var badgeDescription = {{ badgeTypeDescriptions|json_encode|raw }};
+    var pricing = {{ pricing|json_encode|raw }};
+
+    var addBlankPanel = function(badgeName, start, end, count) {
+        addPanel(badgeName, start, end, count, 'blank');
+    };
+
+    var addPanel = function(badgeName, start, end, count, type, pricingKey, description) {
+        var aTagId = 'a_'+badgeName + count;
+        var aTagInfo = {
+            href: 'javascript:void(0);',
+            id: aTagId,
+            badgeName: badgeName,
+            priceStart: pricingStart,
+            priceEnd: pricingEnd,
+            description: '',
+            price: 0
+        };
+
+        var pricingTime = end - start;
+
+        var width = (pricingTime/maxTime) * 100;
+        var color = 'rgba(62,69,81,.7);';
+        if (type !== 'blank' && badgeDescription[badgeName]['color'] !== null) {
+            color = badgeDescription[badgeName]['color'];
+        }
+        var style = 'width: '+width+'%;border: 1px solid black; background-color: '+color+';';
+        var barLabel = '';
+        var icon = 'fas fa-plus-circle';
+        if (type !== 'blank') {
+            barLabel = '$' + type + ' ';
+            icon = 'fas fa-edit';
+        }
+        var divClass = 'text-white text-center pricingBlock';
+        var divId = 'div_'+badgeName + count;
+        var aTag = $('<a>', aTagInfo).append(
+            $('<div>', {style: style, class: divClass, id: divId}).append(barLabel).append(
+                $('<i>', {class: icon})
+            )
+        );
+        var badgeTypeTd = $('#badgeType_td_'+badgeName);
+
+        badgeTypeTd.append(aTag);
+        $('#a_'+badgeName + count).bind( "click", {
+            aTagId: aTagId,
+            badgeName: badgeName,
+            count: count,
+            priceStart: start,
+            priceEnd: end,
+            price: type,
+            description: description,
+            type: type
+        }, function( event ) {
+            var fieldPriceStart = $('#priceStart');
+            var fieldPriceStartLabel = $('#priceStartLabel');
+            var fieldPriceEnd = $('#priceEnd');
+            var fieldPriceEndLabel = $('#priceEndLabel');
+            var fieldPrice = $('#price');
+            var labelPrice = $('#priceLabel');
+            var fieldDescription = $('#description');
+            var labelDescription = $('#descriptionLabel');
+            var editorNew = $('#editorNew');
+            var editorEdit = $('#editorEdit');
+            var editorDelete = $('#editorDelete');
+
+            $('#currentPricingKey').val(pricingKey);
+            $('#currentBadgeType').val(event.data.badgeName);
+
+            var header = 'New ' + badgeDescription[event.data.badgeName]['name'] + ' price';
+            fieldPriceStartLabel.html("Start Date (Min: "+epochToDateFieldLabelFormatted(event.data.priceStart)+")");
+            fieldPriceEndLabel.html("End Date (Max: "+epochToDateFieldLabelFormatted(event.data.priceEnd)+")");
+            fieldPriceStart.val('');
+            fieldPriceEnd.val('');
+            fieldPrice.val('');
+            fieldDescription.val('');
+            labelPrice.removeClass('active');
+            labelDescription.removeClass('active');
+            editorNew.show();
+            editorEdit.hide();
+            editorDelete.hide();
+            if (type !== 'blank') {
+                header = 'Edit ' + badgeDescription[event.data.badgeName]['name'] + ' price';
+                fieldPriceStart.val(epochToDateField(event.data.priceStart));
+                fieldPriceEnd.val(epochToDateField(event.data.priceEnd));
+                fieldPrice.val(event.data.price);
+                labelPrice.addClass('active');
+                fieldDescription.val(event.data.description);
+                labelDescription.addClass('active');
+                editorNew.hide();
+                editorEdit.show();
+                editorDelete.show();
+            }
+
+            $('#editorHeader').html(header);
+            $('#editorPanel').show();
+        });
+    };
+
+    var epochToDateField = function(epochTime) {
+        var date = new Date(epochTime*1000);
+        var year = date.getFullYear();
+        var month = padZeroLeft(date.getMonth() + 1);
+        var day = padZeroLeft(date.getDate());
+
+        return year + '-' + month + '-' + day;
+    };
+
+    var epochToDateFieldLabelFormatted = function(epochTime) {
+        var date = new Date(epochTime*1000);
+        var year = date.getFullYear();
+        var month = padZeroLeft(date.getMonth() + 1);
+        var day = padZeroLeft(date.getDate());
+
+        return month + '/' + day + '/' + year;
+    };
+
+    var padZeroLeft = function(original) {
+        var string = "" + original;
+        var padding = "00";
+        return padding.substring(0, padding.length - string.length) + string
+    };
+
+    var displayPricingForBadgeType = function(badgeName) {
+        var badgePricing = pricing[badgeName];
+
+        var badgeTypeTd = $('#badgeType_td_' + badgeName);
+        badgeTypeTd.html('');
+        if (badgePricing.pricingKeys.length === 0 || jQuery.isEmptyObject(badgePricing.pricing)) {
+            addBlankPanel(badgeName, pricingStart, pricingEnd, 0 + 'blank');
+        } else {
+            var lastPriceChange = pricingStart;
+            for (var j = 0, pricingLength = badgePricing.pricingKeys.length; j < pricingLength; j++) {
+                var pricingKey = badgePricing.pricingKeys[j];
+                var pricePoint = badgePricing.pricing[pricingKey];
+                if (lastPriceChange < pricePoint.start) {
+                    addBlankPanel(badgeName, lastPriceChange, pricePoint.start, j + 'blank');
+                }
+                addPanel(badgeName, pricePoint.start, pricePoint.end, j, pricePoint.price, pricingKey, pricePoint.description);
+                lastPriceChange = pricePoint.end;
+            }
+            if (lastPriceChange < pricingEnd) {
+                addBlankPanel(badgeName, lastPriceChange, pricingEnd, 'endblank');
+            }
+        }
+    };
+
+    var processDone = function (data)
+    {
+        if (data.success) {
+            var tmpBadgeType = data.badgeTypeName;
+            pricing[tmpBadgeType] = data.data;
+            displayPricingForBadgeType(tmpBadgeType);
+            $('#editorPanel').hide();
+        } else {
+            $('#errorMessage').html(data.message);
+            $('#errorRow').show();
+        }
+    };
+
+    $( document ).ready(function() {
+        for (var i = 0, length = badgeTypes.length; i < length; i++) {
+            var badgeName = badgeTypes[i];
+            displayPricingForBadgeType(badgeName);
+        }
+
+        $('#editorCancel').click(function () {
+            $('#editorPanel').hide();
+        });
+
+        $('#editorDelete').click(function() {
+            var pricingKey = $('#currentPricingKey').val();
+            var badgeType = $('#currentBadgeType').val();
+
+            var id = pricing[badgeType]["pricing"][pricingKey]["id"];
+
+            $.post( "{{ path("pricingDelete_Slash") }}"+id, {})
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
+        });
+
+        $('#editorNew').click(function() {
+            $('#errorRow').hide();
+
+            var badgeType = $('#currentBadgeType').val();
+            var priceStart = $('#priceStart').val();
+            var priceEnd = $('#priceEnd').val();
+            var price = $('#price').val();
+            var description = $('#description').val();
+
+            $.post( "{{ path("pricingAdd") }}",
+                {
+                    badgeType: badgeType,
+                    priceStart: priceStart,
+                    priceEnd: priceEnd,
+                    price: price,
+                    description: description
+                })
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
+        });
+
+        $('#editorEdit').click(function() {
+            $('#errorRow').hide();
+
+            var pricingKey = $('#currentPricingKey').val();
+            var badgeType = $('#currentBadgeType').val();
+
+            var id = pricing[badgeType]["pricing"][pricingKey]["id"];
+
+            var priceStart = $('#priceStart').val();
+            var priceEnd = $('#priceEnd').val();
+            var price = $('#price').val();
+            var description = $('#description').val();
+
+            $.post( "{{ path("pricingEdit_Slash") }}" + id,
+                {
+                    priceStart: priceStart,
+                    priceEnd: priceEnd,
+                    price: price,
+                    description: description
+                })
+                .done(function( data ) {
+                    processDone(data);
+                })
+                .fail(function( jqXHR, textStatus ) {
+                    console.log(textStatus);
+                    $('#errorMessage').html(textStatus);
+                    $('#errorRow').show();
+                });
+        });
+    });
+</script>
+<style>
+    .pricingBlock {
+        float: left;
+        border: 1px solid;
+    }
+</style>
+{% endblock %}
