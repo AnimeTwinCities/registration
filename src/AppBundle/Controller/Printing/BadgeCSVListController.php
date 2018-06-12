@@ -154,8 +154,10 @@ class BadgeCSVListController extends Controller
             ->getQuery()
             ->getArrayResult();
 
+        $filename = "{$type}_Badge_Spreadsheet.csv";
+
         header("Content-type: application/csv");
-        header("Content-Disposition: attachment; filename=\"badgeList.csv\"");
+        header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
         header("Pragma: no-cache");
         header("Expires: 0");
 

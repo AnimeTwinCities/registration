@@ -53,32 +53,33 @@ class RegistrationFormController extends Controller
         $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 224, 194), 'strokeColor'=>array(254, 127, 0)));
 
         $pdf->SetFont('Bauhaus LT Medium', 'B', 14);
-        //$pdf->RadioButton('membershiptype', 16);
-        $pdf->Cell(155, 16, 'Standard ($50) Until 1/31');
+        $pdf->Cell(155, 16, 'Child  ($15) Age 6-12');
         $pdf->CheckBox('reg_standard', 16);
         $pdf->cell('15');
-        //$pdf->RadioButton('membershiptype', 16);
         $pdf->Cell(170, 16, 'Sponsor ($150)');
         $pdf->CheckBox('reg_sponsor', 16);
         $pdf->cell('40');
-        //$pdf->RadioButton('membershiptype', 16);
         $pdf->Cell(160, 16, 'Sponsor Only Breakfast');
         $pdf->Ln(16);
 
-        //$pdf->RadioButton('membershiptype', 16);
-        $pdf->Cell(155, 16, 'Standard ($60) 2/1+');
+        $pdf->Cell(155, 16, 'Minor ($40) Age 13-17');
         $pdf->CheckBox('reg_standard_late', 16);
         $pdf->cell('15');
         $pdf->Cell(170, 16, 'Community Sponsor ($250)');
         $pdf->CheckBox('reg_commsponsor', 16);
         $pdf->cell('40');
-        //$pdf->RadioButton('membershiptype', 16);
         $pdf->Cell(95, 16, 'Add-on (+$30)');
-        //$pdf->RadioButton('membershiptype', 16);
         $pdf->CheckBox('breakfast', 16);
         $pdf->Ln(16);
 
-        $pdf->Cell(155, 16, 'At-Door   ($75)');
+        $pdf->Cell(155, 16, 'Adult  ($50) Until 1/31');
+        $pdf->CheckBox('reg_standard_late', 16);
+        $pdf->Ln(16);
+
+        $pdf->Cell(155, 16, 'Adult  ($60) 2/1+');
+        $pdf->CheckBox('reg_standard_late', 16);
+        $pdf->cell('15');
+        $pdf->Cell(170, 16, 'Adult ($75) At-Door');
         $pdf->CheckBox('reg_standard_door', 16);
         $pdf->Ln(16);
 
@@ -86,9 +87,9 @@ class RegistrationFormController extends Controller
         $pdf->SetFont('Bauhaus LT Medium', 'B', 20);
         $y = $pdf->GetY();
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
-        $pdf->Cell($field1_width, 16, 'Membership Type');
+        $pdf->Cell($field1_width, 16, 'Membership Information');
         $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
-        $pdf->Ln(40);
+        $pdf->Ln(30);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $field1_width = 200;
@@ -111,7 +112,7 @@ class RegistrationFormController extends Controller
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field3_width, $y);
         $pdf->Cell($field3_width, 16, 'Middle Name');
-        $pdf->Ln(30);
+        $pdf->Ln(20);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $field1_width = 300;
@@ -128,7 +129,7 @@ class RegistrationFormController extends Controller
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
         $pdf->Cell($field2_width, 16, 'Address 2 (if needed)');
-        $pdf->Ln(30);
+        $pdf->Ln(20);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $field1_width = 400;
@@ -151,7 +152,7 @@ class RegistrationFormController extends Controller
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field3_width, $y);
         $pdf->Cell($field3_width, 16, 'Zip');
-        $pdf->Ln(30);
+        $pdf->Ln(20);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $field1_width = 260;
@@ -168,40 +169,15 @@ class RegistrationFormController extends Controller
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
         $pdf->Cell($field2_width, 16, 'E-mail');
-        $pdf->Ln(30);
+        $pdf->Ln(20);
 
         $pdf->SetFont('helvetica', 'B', 10);
-        $field1_width = 140;
-        $pdf->TextField('badgename', $field1_width, 16);
-        $pdf->Ln(16);
-
-        $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
-        $y = $pdf->GetY();
-        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
-        $pdf->Cell($field1_width, 16, 'Badge Name');
-        $pdf->Ln(18);
-
-        $pdf->SetXY('140', $y-22);
-        $pdf->Cell('20');
-        $pdf->SetFont('helvetica', 'B', 12);
-        $pdf->Cell($field1_width, 16, 'Badge Name Rules:');
-        $pdf->SetFont('helvetica', 'B', 7.5);
-        $pdf->SetXY('140', $y-8);
-        $pdf->Cell('20');
-        $pdf->Cell('10', 16, '*');
-        $pdf->Cell('400', 16, 'Badge names cannot be longer than 20 characters or contain special characters.');
-        $pdf->SetXY('140', $y+1);
-        $pdf->Cell('20');
-        $pdf->Cell('10', 16, '*');
-        $pdf->Cell('400', 16, 'If left blank or deemed inappropriate, Registration staff reserves the right to use your first name.');
-
-        $pdf->ln(30);
-
-        $pdf->SetFont('helvetica', 'B', 10);
-        $birthday_y = $pdf->GetY();
-        $field1_width = 50;
-        $field2_width = 50;
-        $field3_width = 100;
+        $field0_width = 140;
+        $field1_width = 30;
+        $field2_width = 30;
+        $field3_width = 60;
+        $pdf->TextField('badgename', $field0_width, 16);
+        $pdf->cell('10');
         $pdf->TextField('birth_month', $field1_width, 16);
         $pdf->cell('10', '16', '/');
         $pdf->TextField('birth_day', $field2_width, 16);
@@ -211,24 +187,90 @@ class RegistrationFormController extends Controller
 
         $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
         $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field0_width, $y);
+        $pdf->Cell($field0_width, 16, 'Badge Name');
+        $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
-        $pdf->Cell($field1_width, 16, 'Date of Birth: (MM/DD/YYYY)');
+        $pdf->Cell($field1_width, 16, 'DOB: (MM/DD/YYYY)');
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
         $pdf->Cell($field2_width, 16, '');
         $pdf->cell('10');
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field3_width, $y);
         $pdf->Cell($field3_width, 16, '');
-        $pdf->ln('16');
-        $old_y = $pdf->GetY();
-        $pdf->SetFont('Bauhaus LT Medium', 'B', 8);
-        $pdf->SetY($birthday_y);
-        $pdf->SetX('250');
-        $pdf->Cell('300', 16, 'Date of birth will be used to determine your badge bracket.');
-        $pdf->ln('9');
 
-        $pdf->SetY($old_y);
-        $pdf->Ln(40);
+        $pdf->Ln(20);
+
+        $pdf->Ln(10);
+        $field1_width = 260;
+        $field2_width = 300;
+        $pdf->SetFont('Bauhaus LT Medium', 'B', 20);
+        $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width+$field2_width+10, $y);
+        $pdf->Cell($field1_width, 16, 'Emergency Contact');
+        $pdf->Cell('10');
+        //$pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
+        $pdf->Cell($field2_width, 16, 'Accessibility Information');
+        $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
+        $pdf->Ln(30);
+
+        $pdf->SetFont('helvetica', 'B', 10);
+        $field1_width = 260;
+        $field2_width = 300;
+        $pdf->TextField('emergency_contact', $field1_width, 16);
+        $pdf->cell('10');
+        $pdf->TextField('disability_type_1', $field2_width, 16);
+        $pdf->Ln(16);
+
+        $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
+        $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
+        $pdf->Cell($field1_width, 16, 'Contact Name');
+        $pdf->cell('10');
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
+        $pdf->Cell($field2_width, 16, 'Do you have an accessibility need?');
+        $pdf->Ln(20);
+
+        $pdf->SetFont('helvetica', 'B', 10);
+        $field1_width = 260;
+        $field2_width = 300;
+        $pdf->TextField('phone', $field1_width, 16);
+        $pdf->cell('10');
+        $pdf->TextField('disability_type_2', $field2_width, 16);
+        $pdf->Ln(16);
+
+        $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
+        $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
+        $pdf->Cell($field1_width, 16, 'Contact Phone');
+        $pdf->cell('10');
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
+        $pdf->TextField('disability_type_3', $field2_width, 18);
+        $pdf->Ln(20);
+
+        $pdf->SetFont('helvetica', 'B', 10);
+        $field1_width = 260;
+        $field2_width = 300;
+        $pdf->TextField('relation', $field1_width, 16);
+        $pdf->cell('10');
+        $pdf->Line($pdf->GetX(), $y+18, $pdf->GetX()+$field2_width, $y+18);
+        $pdf->TextField('disability_type_4', $field2_width, 16);
+        $pdf->Ln(16);
+
+        $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
+        $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
+        $pdf->Cell($field1_width, 16, 'Attendee Relation to Contact');
+        $pdf->cell('10');
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
+        $pdf->Cell($field2_width, 16, 'How we can we assist?');
+        $pdf->Ln(20);
+
+        //$pdf->SetY($old_y);
+        $pdf->Ln(10);
+        $y = $pdf->GetY();
+        $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width+$field2_width+10, $y);
+        $pdf->Ln(15);
 
         $pdf->SetFont('Bauhaus LT Medium', 'B', 12);
         $pdf->Cell(50, 16, 'Mens:', 0, 0, 'R');
@@ -322,7 +364,7 @@ class RegistrationFormController extends Controller
         $pdf->ln();
         $pdf->cell('20');
         $pdf->Cell('300', 16, 'Shirts must be paid for with your pre-registration. Please note the additional amount in the total below.');
-        $pdf->Ln(30);
+        $pdf->Ln(20);
 
         $field1_width = 210;
         $field2_width = 180;
@@ -335,17 +377,17 @@ class RegistrationFormController extends Controller
         //$pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field2_width, $y);
         $pdf->Cell($field2_width, 16, 'Receive our Newsletter?');
         $pdf->CheckBox('newsletter', 16);
-        $pdf->Ln(40);
+        $pdf->Ln(25);
 
         $y = $pdf->GetY();
         $pdf->SetFont('Bauhaus LT Medium', '', 12);
         $pdf->Cell(170, 16, 'Please make checks payable to: ');
         $pdf->SetFont('Bauhaus', 'B', 12);
         $pdf->Cell(100, 16, 'Anime Twin Cities');
-        $pdf->Ln(22);
+        $pdf->Ln(18);
         $pdf->SetFont('Bauhaus LT Medium', '', 12);
         $pdf->Cell(400, 16, 'Mail your check along with this completed form to:');
-        $pdf->Ln(22);
+        $pdf->Ln(18);
         $pdf->SetFont('Bauhaus', 'B', 14);
         $pdf->Cell('10');
         $pdf->Cell(400, 16, 'Anime Twin Cities');
@@ -355,18 +397,18 @@ class RegistrationFormController extends Controller
         $pdf->Ln(14);
         $pdf->Cell('10');
         $pdf->Cell(400, 16, 'Coon Rapids, MN 55448');
-        $pdf->Ln(22);
+        $pdf->Ln(18);
         $pdf->SetFont('Bauhaus LT Medium', 'B', 12);
         $pdf->Cell(400, 16, 'Please do not send cash.');
 
 
         $pdf->SetFont('helvetica', 'B', 10);
         $field1_width = 200;
-        $pdf->SetXY('350', $y+70);
+        $pdf->SetXY('350', $y+50);
         $pdf->TextField('total_paid', $field1_width, 16);
 
         $pdf->SetFont('Bauhaus LT Medium', 'B', 16);
-        $pdf->SetXY('350', $y+86);
+        $pdf->SetXY('350', $y+66);
         $y = $pdf->GetY();
         $pdf->Line($pdf->GetX(), $y, $pdf->GetX()+$field1_width, $y);
         $pdf->Cell($field1_width, 16, 'Total Amount Paid');
