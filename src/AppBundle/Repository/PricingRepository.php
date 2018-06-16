@@ -35,6 +35,50 @@ class PricingRepository extends EntityRepository
     }
 
     /**
+     * @return Pricing[]
+     */
+    public function findCurrentPricing()
+    {
+        $event = $this->getEntityManager()->getRepository(Event::class)->getSelectedEvent();
+
+        $date = new \DateTime();
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('p')
+            ->from(Pricing::class, 'p')
+            ->where("p.event = :event")
+            ->andWhere("p.pricingBegin < :date1")
+            ->andWhere("p.pricingEnd > :date2")
+            ->setParameter('event', $event)
+            ->setParameter('date1', $date)
+            ->setParameter('date2', $date);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @return Pricing[]
+     */
+    public function findFuturePricing()
+    {
+        $event = $this->getEntityManager()->getRepository(Event::class)->getSelectedEvent();
+
+        $date = new \DateTime();
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('p')
+            ->from(Pricing::class, 'p')
+            ->where("p.event = :event")
+            ->andWhere("p.pricingBegin > :date1")
+            ->andWhere("p.pricingEnd > :date2")
+            ->setParameter('event', $event)
+            ->setParameter('date1', $date)
+            ->setParameter('date2', $date);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param BadgeType $badgeType
      * @param \DateTime $date
      * @param Pricing $pricing
