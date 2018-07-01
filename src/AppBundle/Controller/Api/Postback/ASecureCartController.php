@@ -183,20 +183,6 @@ class ASecureCartController extends Controller
                     ->generateNumber($registration);
                 $registration->setNumber($number);
 
-                if ($badgeType->getName() == 'ADREGSTANDARD' &&
-                    ($registration->getBirthday()->getTimestamp() > strtotime($event->getStartdate()->format('m/d/y') . " -18 years"))
-                ) {
-                    $badgeType = $entityManager
-                        ->getRepository(BadgeType::class)
-                        ->getBadgeTypeFromType('MINOR');
-                    if (!$badgeType) {
-                        $error = "BadgeType didn't load correctly: 'MINOR'";
-                        $this->createRegistrationError($error, $xmlPost);
-
-                        continue;
-                    }
-                }
-
                 $entityManager->persist($registration);
                 $entityManager->flush();
 
