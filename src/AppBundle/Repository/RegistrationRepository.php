@@ -105,8 +105,9 @@ class RegistrationRepository extends EntityRepository
         $page = (int) $page;
 
         $badgeListQueryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $badgeListQueryBuilder->select('GROUP_CONCAT(DISTINCT IDENTITY(sb.badgeType) SEPARATOR \' \')')
+        $badgeListQueryBuilder->select('GROUP_CONCAT(DISTINCT bt.name SEPARATOR \' \')')
             ->from(Badge::class, 'sb')
+            ->innerJoin(BadgeType::class, 'bt', Join::WITH, 'sb.badgeType = bt.id')
             ->where('r.id = sb.registration')
         ;
 
@@ -206,33 +207,35 @@ class RegistrationRepository extends EntityRepository
             $tmp['is_exhibitor'] = 0;
             $tmp['is_child'] = 0;
 
+            $badgeTypeRepo = $this->getEntityManager()->getRepository(BadgeType::class);
+
             foreach ($Badges as $Badge) {
                 switch ($Badge) {
-                    case 1:
+                    case 'ADREGSTANDARD':
                         $tmp['is_adult'] = 1;
                         break;
-                    case 2:
+                    case 'MINOR':
                         $tmp['is_minor'] = 1;
                         break;
-                    case 3:
+                    case 'ADREGSPONSOR':
                         $tmp['is_sponsor'] = 1;
                         break;
-                    case 4:
+                    case 'ADREGCOMMSPONSOR ':
                         $tmp['is_comsponsor'] = 1;
                         break;
-                    case 5:
+                    case 'GUEST':
                         $tmp['is_guest'] = 1;
                         break;
-                    case 6:
+                    case 'VENDOR':
                         $tmp['is_vendor'] = 1;
                         break;
-                    case 7:
+                    case 'STAFF':
                         $tmp['is_staff'] = 1;
                         break;
-                    case 8:
+                    case 'EXHIBITOR':
                         $tmp['is_exhibitor'] = 1;
                         break;
-                    case 9:
+                    case 'CHILD':
                         $tmp['is_child'] = 1;
                         break;
                 }
