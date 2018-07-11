@@ -204,6 +204,7 @@ class RegistrationRepository extends EntityRepository
             $tmp['is_vendor'] = 0;
             $tmp['is_staff'] = 0;
             $tmp['is_exhibitor'] = 0;
+            $tmp['is_child'] = 0;
 
             foreach ($Badges as $Badge) {
                 switch ($Badge) {
@@ -230,6 +231,9 @@ class RegistrationRepository extends EntityRepository
                         break;
                     case 8:
                         $tmp['is_exhibitor'] = 1;
+                        break;
+                    case 9:
+                        $tmp['is_child'] = 1;
                         break;
                 }
             }

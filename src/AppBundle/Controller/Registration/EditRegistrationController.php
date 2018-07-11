@@ -628,6 +628,7 @@ class EditRegistrationController extends Controller
             $allow_one_badge_types = array(
                 'ADREGSTANDARD',
                 'MINOR',
+                'CHILD',
                 'ADREGSPONSOR',
                 'ADREGCOMMSPONSOR',
                 'GUEST',
@@ -638,11 +639,6 @@ class EditRegistrationController extends Controller
             $toDelete = [];
             $badgetypeFound = false;
             $badgeTypeName = $request->request->get('badgeTypeName');
-            if ($badgeTypeName == 'ADREGSTANDARD') {
-                if ($registration->getBirthday()->getTimestamp() > strtotime($event->getStartdate()->format('Y-m-d') . " -18 years")) {
-                    $badgeTypeName = 'MINOR';
-                }
-            }
 
             $badges = $registration->getBadges();
             foreach ($badges as $badge) {
