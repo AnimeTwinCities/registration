@@ -95,10 +95,20 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary btn-sm {{ ('ADREGSTANDARD' in currentBadgeTypes or 'MINOR' in currentBadgeTypes) ? 'active' : ''}}">
+                <label class="btn btn-primary btn-sm {{ ('ADREGSTANDARD' in currentBadgeTypes) ? 'active' : ''}}">
                     <input type="radio" name="badgeTypeName" value="ADREGSTANDARD"
-                        {{ ('ADREGSTANDARD' in currentBadgeTypes or 'MINOR' in currentBadgeTypes) ? 'checked' : ''}}>
-                    Standard (Minors detected by Birthdate)<br>
+                        {{ ('ADREGSTANDARD' in currentBadgeTypes) ? 'checked' : ''}}>
+                    Adult (18+)<br>
+                </label>
+                <label class="btn btn-primary btn-sm {{ ('MINOR' in currentBadgeTypes) ? 'active' : ''}}">
+                    <input type="radio" name="badgeTypeName" value="MINOR"
+                        {{ ('MINOR' in currentBadgeTypes) ? 'checked' : ''}}>
+                    Minor (13-17)<br>
+                </label>
+                <label class="btn btn-primary btn-sm {{ ('CHILD' in currentBadgeTypes) ? 'active' : ''}}">
+                    <input type="radio" name="badgeTypeName" value="CHILD"
+                        {{ ('CHILD' in currentBadgeTypes) ? 'checked' : ''}}>
+                    Child (6-12)<br>
                 </label>
                 <label class="btn btn-primary btn-sm {{ 'ADREGSPONSOR' in currentBadgeTypes ? 'active' : '' }}">
                     <input type="radio" name="badgeTypeName" value="ADREGSPONSOR"

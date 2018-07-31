@@ -37,12 +37,7 @@ class Email
      */
     public function generateAndSendConfirmationEmail(Registration $registration, bool $forceResend = false)
     {
-        if ($registration->getEmail() == ''
-            || ($registration->getConfirmationnumber() != ''
-                && !$forceResend
-            )
-        ) {
-
+        if ($registration->getConfirmationnumber() == '' && $forceResend) {
             return;
         }
 

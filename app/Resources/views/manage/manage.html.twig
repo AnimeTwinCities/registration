@@ -184,8 +184,10 @@
                     // Populate Registration Results
                     for (i = 0; i < json.results.length; i++) {
                         var reg = json.results[i];
-                        add_registration(reg.Registration_ID, reg.Year, reg.Number, reg.LastName, reg.FirstName, reg.BadgeName, reg.Reg_Status, reg.Email,
-                            reg.ConfirmationNumber, reg.group, reg.is_adult, reg.is_minor, reg.is_sponsor, reg.is_comsponsor, reg.is_staff, reg.is_guest, reg.is_vendor, reg.is_exhibitor);
+                        add_registration(reg.Registration_ID, reg.Year, reg.Number, reg.LastName,
+                            reg.FirstName, reg.BadgeName, reg.Reg_Status, reg.Email, reg.ConfirmationNumber,
+                            reg.group, reg.is_adult, reg.is_minor, reg.is_sponsor, reg.is_comsponsor,
+                            reg.is_staff, reg.is_guest, reg.is_vendor, reg.is_exhibitor, reg.is_child);
                     }
 
                     // Populate Page Data
@@ -294,7 +296,7 @@
         }
 
         function add_registration(registration_id, year, number, last_name, first_name, badge_name, reg_status, Email, ConfirmationNumber, group, is_adult, is_minor, is_sponsor,
-                                  is_comsponsor, is_staff, is_guest, is_vendor, is_exhibitor) {
+                                  is_comsponsor, is_staff, is_guest, is_vendor, is_exhibitor, is_child) {
             var td_badges     = $('<td>');
 
             if (is_adult) {
@@ -320,6 +322,9 @@
             }
             if (is_exhibitor) {
                 td_badges.html(td_badges.html()+'<span class="badge badge-pill silver" style="color: #000000!important">E</span>');
+            }
+            if (is_child) {
+                td_badges.html(td_badges.html()+'<span class="badge badge-pill pink" style="color: #000000!important">C</span>');
             }
             if (group !== null) {
                 group = '<a href="{{ path('groupEditNewSlash') }}'+group+'"><i class="fas fa-users"></i></a>';
