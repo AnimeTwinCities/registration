@@ -10,7 +10,7 @@
 namespace AppBundle\Controller\Api;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use PHPQRCode\QRcode;
+use Endroid\QrCode\QrCode;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class QRCodeController extends Controller
@@ -25,7 +25,11 @@ class QRCodeController extends Controller
         if (substr($text, 0, 4) !== '$AD-') {
             $text = '$AD-C-'.$text;
         }
-        QRcode::png($text);
+        $qrCode = new QrCode($text);
+        $qrCode->setSize(150);
+
+        header('Content-Type: '.$qrCode->getContentType());
+        echo $qrCode->writeString();
         die();
     }
 }
