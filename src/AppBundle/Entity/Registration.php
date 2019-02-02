@@ -467,6 +467,9 @@ class Registration
      */
     public function setState($state)
     {
+        if (strlen($state) > 32) {
+            $state = substr($state, 0, 32);
+        }
         $this->state = $state;
 
         return $this;
@@ -491,6 +494,9 @@ class Registration
      */
     public function setZip($zip)
     {
+        if (strlen($zip) > 16) {
+            $zip = substr($zip, 0, 16);
+        }
         $this->zip = $zip;
 
         return $this;

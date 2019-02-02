@@ -16,11 +16,11 @@ use AppBundle\Entity\Event;
 use AppBundle\Entity\Extra;
 use AppBundle\Entity\Registration;
 use AppBundle\Entity\RegistrationError;
-use AppBundle\Entity\Registrationextra;
 use AppBundle\Entity\Registrationshirt;
 use AppBundle\Entity\RegistrationStatus;
 use AppBundle\Entity\RegistrationType;
 use AppBundle\Entity\Shirt;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\ORMException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -227,6 +227,9 @@ class ASecureCartController extends Controller
                 $this->get('util_email')->generateAndSendConfirmationEmail($registration);
             }
         } catch (ORMException $e) {
+            $this->get('util_email')->sendErrorMessageToRegistration($e->getMessage());
+        } catch (DriverException $e) {
+            // Catch truncate errors
             $this->get('util_email')->sendErrorMessageToRegistration($e->getMessage());
         }
         $response = new Response();
