@@ -416,10 +416,10 @@ class PrintingController extends Controller
         $this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         $this->pdf->SetFont('helveticaB', 'B', 13);
-        $this->pdf->setXY(5.5, 7);
+        $this->pdf->setXY(4, 7);
         $this->pdf->Cell(0, 0, $regNumber, 0, 0, 'L');
         $this->pdf->SetFont('helveticaB', 'B', 8);
-        $this->pdf->setXY(12.5, 12.5);
+        $this->pdf->setXY(11, 12.5);
         $this->pdf->Cell(0, 0, $badgeNumber, 0, 0, 'L');
         if ($groupName == '') {
             $this->pdf->SetFont('Bauhaus LT Medium', 'B', 11);
