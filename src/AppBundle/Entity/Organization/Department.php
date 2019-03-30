@@ -6,8 +6,8 @@
  *
  * See the LICENSE file in the root of this project for details.
  */
-
 declare(strict_types=1);
+
 
 namespace AppBundle\Entity\Organization;
 
@@ -18,15 +18,15 @@ use \AppBundle\Entity\User;
 /**
  * Badge
  *
- * @ORM\Table(name="organization_staff",
+ * @ORM\Table(name="organization_department",
  *     indexes={
  *      @ORM\Index(columns={"created_by"}),
  *      @ORM\Index(columns={"modified_by"})
  *     }
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Organization\StaffRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Organization\DepartmentRepository")
  */
-class Staff
+class Department
 {
     /**
      * @var integer
@@ -40,51 +40,9 @@ class Staff
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $firstName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=255, nullable=false)
-     */
-    private $lastName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nick_name", type="string", length=255, nullable=true)
-     */
-    private $nickName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
-     */
-    private $phoneNumber;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_of_birth", type="datetime", nullable=false)
-     */
-    private $dateOfBirth;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="personal_email", type="string", length=255, nullable=false)
-     */
-    private $personalEmail;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="official_email", type="string", length=255, nullable=true)
-     */
-    private $officialEmail;
+    private $name;
 
     /**
      * @var string
@@ -96,16 +54,23 @@ class Staff
     /**
      * @var string
      *
-     * @ORM\Column(name="shirt_size", type="string", length=255, nullable=true)
+     * @ORM\Column(name="external_email", type="string", length=255, nullable=true)
      */
-    private $shirtSize;
+    private $externalEmail;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $allStaffReceiveExternalEmail = false;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="shirt_type", type="string", length=255, nullable=true)
+     * @ORM\Column(name="internal_email", type="string", length=255, nullable=true)
      */
-    private $shirtType;
+    private $internalEmail;
 
     /**
      * @var boolean
@@ -113,20 +78,6 @@ class Staff
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="completed_intake", type="boolean", nullable=false)
-     */
-    private $completedIntake = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="intake_form_file", type="string", length=255, nullable=true)
-     */
-    private $intakeFormFile;
 
     /**
      * @var User
