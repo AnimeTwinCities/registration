@@ -95,9 +95,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary btn-sm {{ ('ADREGSTANDARD' in currentBadgeTypes) ? 'active' : ''}}">
+                <label class="btn btn-primary btn-sm {{ ('ADREGSTANDARD' in currentBadgeTypes) or (currentBadgeTypes is empty) ? 'active' : ''}}">
                     <input type="radio" name="badgeTypeName" value="ADREGSTANDARD"
-                        {{ ('ADREGSTANDARD' in currentBadgeTypes) ? 'checked' : ''}}>
+                        {{ ('ADREGSTANDARD' in currentBadgeTypes) or (currentBadgeTypes is empty) ? 'checked' : ''}}>
                     Adult (18+)<br>
                 </label>
                 <label class="btn btn-primary btn-sm {{ ('MINOR' in currentBadgeTypes) ? 'active' : ''}}">
@@ -313,7 +313,7 @@
                         <input type="text"
                                id="birthDate"
                                name="birthDate"
-                               class="form-control validate datepicker"
+                               class="form-control validate"
                                value="{{ registration is not null and registration.birthday ? registration.birthday|date('m/d') : '' }}"
                                placeholder="03/26"
                                required>
@@ -382,11 +382,16 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <button id="save_form" type="button" class="btn btn-warning btn-lg">Save</button>
+                </div>
+                <div class="col-sm-3">
+                    <button id="addAnother" type="button" class="btn btn-info btn-sm" style="display: none;">
+                        Add Another
+                    </button>
                 </div>
             </div>
         </div>
@@ -778,7 +783,7 @@
                 .done(function (data)
                 {
                     $('#alert_div').show();
-                    $('#alert_msg').text(data['message']);
+                    $('#alert_msg').text(data['message'] + data['Number'] + "</b>");
                     if (data['success']) {
                         $('#alert_heading').text('Info');
                         $('#alert_subdiv').removeClass('bs-callout-danger');
@@ -816,6 +821,7 @@
 
         $('#save_form').click(function ()
         {
+            var action = "{{ registration is null ? 'new' : 'edit' }}";
             // Submit the AJAX
             $.ajax({
                 type: 'POST',
@@ -843,7 +849,7 @@
                 .done(function (data)
                 {
                     $('#alert_div').show();
-                    $('#alert_msg').text(data['message']);
+                    $('#alert_msg').text(data['message'] + " Updated Registration " + data['Number']);
                     if (data['success']) {
                         $('#alert_heading').text('Info');
                         $('#alert_subdiv').removeClass('bs-callout-danger');
@@ -853,6 +859,9 @@
                         var group = '';
                         if ($('#groupId').val() != '') {
                             group = 'Group ';
+                        }
+                        if (action === 'new') {
+                            $('#addAnother').show();
                         }
                         $('#reg_header').html(
                             'Edit ' + group + 'Membership - ' + data['Year'] + ' - ' + data['Number']);
@@ -868,6 +877,11 @@
                         $('#alert_subdiv').removeClass('bs-callout-info');
                     }
                 });
+        });
+
+        $('#addAnother').click(function ()
+        {
+            window.location.href = '/registration/edit/';
         });
 
         $('#RegistrationType').on('change', function ()
