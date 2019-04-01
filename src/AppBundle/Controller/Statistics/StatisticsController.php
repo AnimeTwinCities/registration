@@ -434,12 +434,23 @@ class StatisticsController extends Controller
                 $end = date('Y-m-d H:i:s', strtotime("now -{$yearDifference} YEARS"));
             }
 
+            $subQueryBuilder = $this->get('doctrine.orm.default_entity_manager')->createQueryBuilder();
+            $subQuery = $subQueryBuilder
+                ->select('IDENTITY(b.registration)')
+                ->from(Badge::class, 'b')
+                ->innerJoin('b.badgeStatus', 'bs')
+                ->andWhere('bs.active = :active')
+                ->getDQL();
+
+
             $queryBuilder = $this->get('doctrine.orm.default_entity_manager')->createQueryBuilder();
             $queryBuilder
                 ->select('count(r.id)')
                 ->from(Registration::class, 'r')
                 ->where('r.event = :event')
+                ->andwhere($queryBuilder->expr()->in('r.id', $subQuery))
                 ->andWhere('r.createdDate <= :end')
+                ->setParameter('active', true)
                 ->setParameter('event', $event)
                 ->setParameter('end', $end)
             ;
