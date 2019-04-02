@@ -124,6 +124,10 @@ easy_admin:
               children:
                 - { entity: 'Event', icon: 'calendar' }
                 - { entity: 'User', icon: 'user-circle' }
+            - label: 'Organization'
+              icon: 'sitemap'
+              children:
+                - { entity: 'Department', icon: 'users' }
     site_name: '<img src="/images/ADLogo270.png" alt="Anime Detour" style="width:220px;">'
 
     list:
