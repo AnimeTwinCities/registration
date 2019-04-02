@@ -166,4 +166,300 @@ class Staff
      * })
      */
     private $modifiedBy;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNickName(): string
+    {
+        return $this->nickName;
+    }
+
+    /**
+     * @param string $nickName
+     */
+    public function setNickName(string $nickName): void
+    {
+        $this->nickName = $nickName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     */
+    public function setPhoneNumber(string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateOfBirth(): \DateTime
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param \DateTime $dateOfBirth
+     */
+    public function setDateOfBirth(\DateTime $dateOfBirth): void
+    {
+        $this->dateOfBirth = $dateOfBirth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPersonalEmail(): string
+    {
+        return $this->personalEmail;
+    }
+
+    /**
+     * @param string $personalEmail
+     */
+    public function setPersonalEmail(string $personalEmail): void
+    {
+        $this->personalEmail = $personalEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOfficialEmail(): string
+    {
+        return $this->officialEmail;
+    }
+
+    /**
+     * @param string $officialEmail
+     */
+    public function setOfficialEmail(string $officialEmail): void
+    {
+        $this->officialEmail = $officialEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShirtSize(): string
+    {
+        return $this->shirtSize;
+    }
+
+    /**
+     * @param string $shirtSize
+     */
+    public function setShirtSize(string $shirtSize): void
+    {
+        $this->shirtSize = $shirtSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShirtType(): string
+    {
+        return $this->shirtType;
+    }
+
+    /**
+     * @param string $shirtType
+     */
+    public function setShirtType(string $shirtType): void
+    {
+        $this->shirtType = $shirtType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompletedIntake(): bool
+    {
+        return $this->completedIntake;
+    }
+
+    /**
+     * @param bool $completedIntake
+     */
+    public function setCompletedIntake(bool $completedIntake): void
+    {
+        $this->completedIntake = $completedIntake;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntakeFormFile(): string
+    {
+        return $this->intakeFormFile;
+    }
+
+    /**
+     * @param string $intakeFormFile
+     */
+    public function setIntakeFormFile(string $intakeFormFile): void
+    {
+        $this->intakeFormFile = $intakeFormFile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegistrations()
+    {
+        return $this->registrations;
+    }
+
+    /**
+     * @param mixed $registrations
+     */
+    public function setRegistrations($registrations): void
+    {
+        $this->registrations = $registrations;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy(User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedDate(): \DateTime
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * @param \DateTime $createdDate
+     */
+    public function setCreatedDate(\DateTime $createdDate): void
+    {
+        $this->createdDate = $createdDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getModifiedDate(): \DateTime
+    {
+        return $this->modifiedDate;
+    }
+
+    /**
+     * @param \DateTime $modifiedDate
+     */
+    public function setModifiedDate(\DateTime $modifiedDate): void
+    {
+        $this->modifiedDate = $modifiedDate;
+    }
+
+    /**
+     * @return User
+     */
+    public function getModifiedBy(): User
+    {
+        return $this->modifiedBy;
+    }
+
+    /**
+     * @param User $modifiedBy
+     */
+    public function setModifiedBy(User $modifiedBy): void
+    {
+        $this->modifiedBy = $modifiedBy;
+    }
 }

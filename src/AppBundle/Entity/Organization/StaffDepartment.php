@@ -126,4 +126,188 @@ class StaffDepartment
      * })
      */
     private $modifiedBy;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return Staff
+     */
+    public function getStaff(): Staff
+    {
+        return $this->staff;
+    }
+
+    /**
+     * @param Staff $staff
+     */
+    public function setStaff(Staff $staff): void
+    {
+        $this->staff = $staff;
+    }
+
+    /**
+     * @return Department
+     */
+    public function getDepartment(): Department
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param Department $department
+     */
+    public function setDepartment(Department $department): void
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPosition(): string
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param string $position
+     */
+    public function setPosition(string $position): void
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes(): string
+    {
+        return $this->notes;
+    }
+
+    /**
+     * @param string $notes
+     */
+    public function setNotes(string $notes): void
+    {
+        $this->notes = $notes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHead(): bool
+    {
+        return $this->isHead;
+    }
+
+    /**
+     * @param bool $isHead
+     */
+    public function setIsHead(bool $isHead): void
+    {
+        $this->isHead = $isHead;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubHead(): bool
+    {
+        return $this->isSubHead;
+    }
+
+    /**
+     * @param bool $isSubHead
+     */
+    public function setIsSubHead(bool $isSubHead): void
+    {
+        $this->isSubHead = $isSubHead;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTemporary(): bool
+    {
+        return $this->isTemporary;
+    }
+
+    /**
+     * @param bool $isTemporary
+     */
+    public function setIsTemporary(bool $isTemporary): void
+    {
+        $this->isTemporary = $isTemporary;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy(User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedDate(): \DateTime
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * @param \DateTime $createdDate
+     */
+    public function setCreatedDate(\DateTime $createdDate): void
+    {
+        $this->createdDate = $createdDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getModifiedDate(): \DateTime
+    {
+        return $this->modifiedDate;
+    }
+
+    /**
+     * @param \DateTime $modifiedDate
+     */
+    public function setModifiedDate(\DateTime $modifiedDate): void
+    {
+        $this->modifiedDate = $modifiedDate;
+    }
+
+    /**
+     * @return User
+     */
+    public function getModifiedBy(): User
+    {
+        return $this->modifiedBy;
+    }
+
+    /**
+     * @param User $modifiedBy
+     */
+    public function setModifiedBy(User $modifiedBy): void
+    {
+        $this->modifiedBy = $modifiedBy;
+    }
 }

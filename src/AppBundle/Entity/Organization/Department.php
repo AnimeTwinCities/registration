@@ -112,4 +112,172 @@ class Department
      * })
      */
     private $modifiedBy;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalEmail(): string
+    {
+        return $this->externalEmail;
+    }
+
+    /**
+     * @param string $externalEmail
+     */
+    public function setExternalEmail(string $externalEmail): void
+    {
+        $this->externalEmail = $externalEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllStaffReceiveExternalEmail(): bool
+    {
+        return $this->allStaffReceiveExternalEmail;
+    }
+
+    /**
+     * @param bool $allStaffReceiveExternalEmail
+     */
+    public function setAllStaffReceiveExternalEmail(bool $allStaffReceiveExternalEmail): void
+    {
+        $this->allStaffReceiveExternalEmail = $allStaffReceiveExternalEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInternalEmail(): string
+    {
+        return $this->internalEmail;
+    }
+
+    /**
+     * @param string $internalEmail
+     */
+    public function setInternalEmail(string $internalEmail): void
+    {
+        $this->internalEmail = $internalEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy(User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedDate(): \DateTime
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * @param \DateTime $createdDate
+     */
+    public function setCreatedDate(\DateTime $createdDate): void
+    {
+        $this->createdDate = $createdDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getModifiedDate(): \DateTime
+    {
+        return $this->modifiedDate;
+    }
+
+    /**
+     * @param \DateTime $modifiedDate
+     */
+    public function setModifiedDate(\DateTime $modifiedDate): void
+    {
+        $this->modifiedDate = $modifiedDate;
+    }
+
+    /**
+     * @return User
+     */
+    public function getModifiedBy(): User
+    {
+        return $this->modifiedBy;
+    }
+
+    /**
+     * @param User $modifiedBy
+     */
+    public function setModifiedBy(User $modifiedBy): void
+    {
+        $this->modifiedBy = $modifiedBy;
+    }
 }
