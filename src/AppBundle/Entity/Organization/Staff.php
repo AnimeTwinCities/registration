@@ -129,6 +129,11 @@ class Staff
     private $intakeFormFile;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Registration", mappedBy="staffMember")
+     */
+    private $registrations;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")

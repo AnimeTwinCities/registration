@@ -15,18 +15,19 @@ namespace AppBundle\Entity\Organization;
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
 
+
 /**
  * Badge
  *
- * @ORM\Table(name="organization_department",
+ * @ORM\Table(name="organization_staff_department",
  *     indexes={
  *      @ORM\Index(columns={"created_by"}),
  *      @ORM\Index(columns={"modified_by"})
  *     }
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Organization\DepartmentRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Organization\StaffDepartmentRepository")
  */
-class Department
+class StaffDepartment
 {
     /**
      * @var integer
@@ -38,46 +39,59 @@ class Department
     private $id;
 
     /**
-     * @var string
+     * @var Staff
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
+     * })
      */
-    private $name;
+    private $staff;
+
+    /**
+     * @var Department
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * })
+     */
+    private $department;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="position", type="string", length=255, nullable=true)
      */
-    private $description;
+    private $position;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="external_email", type="string", length=255, nullable=true)
+     * @ORM\Column(name="notes", type="string", length=8400, nullable=true)
      */
-    private $externalEmail;
+    private $notes;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="all_staff_receive_external_email", type="boolean", nullable=false)
+     * @ORM\Column(name="is_head", type="boolean", nullable=false)
      */
-    private $allStaffReceiveExternalEmail = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="internal_email", type="string", length=255, nullable=true)
-     */
-    private $internalEmail;
+    private $isHead = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @ORM\Column(name="is_sub_head", type="boolean", nullable=false)
      */
-    private $active = false;
+    private $isSubHead = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_temporary", type="boolean", nullable=false)
+     */
+    private $isTemporary = false;
 
     /**
      * @var User

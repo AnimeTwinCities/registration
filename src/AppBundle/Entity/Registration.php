@@ -9,6 +9,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Organization\Staff;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -264,6 +265,15 @@ class Registration
      */
     private $extras;
 
+    /**
+     * Which staff record does this use tie back to?
+     *
+     * @var Staff
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff", inversedBy="registrations")
+     * @ORM\JoinTable(name="organization_registration_staff_member")
+     */
+    private $staffMember;
 
 
     /**
