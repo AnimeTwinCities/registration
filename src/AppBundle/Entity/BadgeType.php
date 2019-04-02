@@ -51,14 +51,14 @@ class BadgeType
      *
      * @ORM\Column(name="staff", type="boolean", length=255, nullable=false)
      */
-    private $staff = '0';
+    private $staff = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="sponsor", type="boolean", length=255, nullable=false)
      */
-    private $sponsor = '0';
+    private $sponsor = false;
 
     /**
      * One Product has Many Features.
