@@ -94,6 +94,13 @@ class StaffDepartment
     private $isTemporary = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_primary", type="boolean", nullable=false)
+     */
+    private $isPrimary = false;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
@@ -245,6 +252,22 @@ class StaffDepartment
     public function setIsTemporary(bool $isTemporary): void
     {
         $this->isTemporary = $isTemporary;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrimary(): bool
+    {
+        return $this->isPrimary;
+    }
+
+    /**
+     * @param bool $isPrimary
+     */
+    public function setIsPrimary(bool $isPrimary): void
+    {
+        $this->isPrimary = $isPrimary;
     }
 
     /**
