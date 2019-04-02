@@ -7,6 +7,8 @@
  * See the LICENSE file in the root of this project for details.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Organization\Staff;
@@ -1023,5 +1025,21 @@ class Registration
     public function removeExtra($extra)
     {
         $this->extras->removeElement($extra);
+    }
+
+    /**
+     * @return Staff
+     */
+    public function getStaffMember(): ?Staff
+    {
+        return $this->staffMember;
+    }
+
+    /**
+     * @param Staff $staffMember
+     */
+    public function setStaffMember(Staff $staffMember): void
+    {
+        $this->staffMember = $staffMember;
     }
 }

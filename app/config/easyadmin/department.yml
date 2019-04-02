@@ -11,28 +11,10 @@ easy_admin:
                     - { property: 'externalEmail' }
                     - { property: 'active', type: 'boolean' }
             form:
-                actions:
-                    - { name: 'makeActive', label: 'Make Active Year', css_class: 'btn btn-info', icon: 'calendar' }
                 fields:
-                    - { property: 'year' }
-                    - {
-                        property: 'startDate',
-                        format: 'n/j/Y',
-                        type: 'date'
-                      }
-                    - {
-                        property: 'endDate',
-                        format: 'n/j/Y',
-                        type: 'date'
-                      }
-                    - {
-                        property: 'preRegistrationStart',
-                        format: 'n/j/Y',
-                        type: 'date'
-                      }
-                    - {
-                        property: 'preRegistrationEnd',
-                        format: 'n/j/Y',
-                        type: 'date'
-                      }
-                    - { property: 'attendanceCap' }
+                    - { property: 'name' }
+                    - { property: 'description' }
+                    - { property: 'externalEmail' }
+                    - { property: 'allStaffReceiveExternalEmail' }
+                    - { property: 'internalEmail' }
+                    - { property: 'active' }

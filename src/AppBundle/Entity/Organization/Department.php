@@ -6,12 +6,14 @@
  *
  * See the LICENSE file in the root of this project for details.
  */
+
 declare(strict_types=1);
 
 
 namespace AppBundle\Entity\Organization;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
 
@@ -28,6 +30,11 @@ use \AppBundle\Entity\User;
  */
 class Department
 {
+    public function __construct()
+    {
+        $this->childDepartments = new ArrayCollection();
+    }
+
     /**
      * @var integer
      *
@@ -80,6 +87,21 @@ class Department
     private $active = false;
 
     /**
+     * @var Department[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\Department", mappedBy="parentDepartment")
+     */
+    private $childDepartments;
+
+    /**
+     * @var Department
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Department", inversedBy="childDepartments")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parentDepartment;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
@@ -116,7 +138,7 @@ class Department
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -124,7 +146,7 @@ class Department
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -140,7 +162,7 @@ class Department
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -156,7 +178,7 @@ class Department
     /**
      * @return string
      */
-    public function getExternalEmail(): string
+    public function getExternalEmail(): ?string
     {
         return $this->externalEmail;
     }
@@ -188,7 +210,7 @@ class Department
     /**
      * @return string
      */
-    public function getInternalEmail(): string
+    public function getInternalEmail(): ?string
     {
         return $this->internalEmail;
     }
@@ -215,6 +237,54 @@ class Department
     public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    /**
+     * @return Department[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getChildDepartments(): array
+    {
+        return $this->childDepartments;
+    }
+
+    /**
+     * @param Department[] $childDepartments
+     */
+    public function setChildDepartments(array $childDepartments): void
+    {
+        $this->childDepartments = $childDepartments;
+    }
+
+    /**
+     * @param Department $childDepartments
+     */
+    public function addChildDepartment(Department $childDepartments)
+    {
+        $this->childDepartments->add($childDepartments);
+    }
+
+    /**
+     * @param Department $childDepartments
+     */
+    public function removeChildDepartment($childDepartments)
+    {
+        $this->childDepartments->removeElement($childDepartments);
+    }
+
+    /**
+     * @return Department
+     */
+    public function getParentDepartment(): ?Department
+    {
+        return $this->parentDepartment;
+    }
+
+    /**
+     * @param Department $parentDepartment
+     */
+    public function setParentDepartment(Department $parentDepartment): void
+    {
+        $this->parentDepartment = $parentDepartment;
     }
 
     /**
