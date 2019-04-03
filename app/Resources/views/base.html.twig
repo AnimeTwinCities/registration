@@ -1,0 +1,55 @@
+{##
+ # Copyright (c) 2018. Anime Twin Cities, Inc.
+ #
+ # This project, including all of the files and their contents, is licensed under the terms of MIT License
+ #
+ # See the LICENSE file in the root of this project for details.
+#}
+<!DOCTYPE html>
+{% block htmlClass %}
+    {% if htmlClass is defined %}
+<html lang="en" class="{{ htmlClass }}">
+{% else %}
+<html lang="en">
+{% endif %}
+{% endblock %}
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    {% block pageDescription %}
+        {% if pageDescription is defined %}
+            <meta name="description" content="{{ pageDescription }}"/>
+        {% endif %}
+    {% endblock %}
+
+    <link rel="image_src" href="{{ asset('images/adlogo.jpg') }}"/>
+
+    {% block pageKeywords %}
+        {% if pageKeywords is defined %}
+            <meta name="keywords" content="{{ pageKeywords }}"/>
+        {% endif %}
+    {% endblock %}
+    <meta name="author" content="Anime Twin Cities, Inc."/>
+
+    <link href="http://www.animedetour.com/rss" rel="alternate" type="application/rss+xml"
+          title="Anime Detour RSS Feed"/>
+
+    {% block rendering_library %}
+    {% endblock %}
+
+    {% block additional_css %}
+    {% endblock %}
+
+    <title>
+        {% block title %}
+            {% if pageTitle is defined %}
+                {{ pageTitle }} -
+            {% endif %}
+            Anime Detour Registration System
+        {% endblock %}
+    </title>
+</head>
+
+{% block html_body %}
+{% endblock %}
+
+</html>

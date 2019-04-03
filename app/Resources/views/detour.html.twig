@@ -5,35 +5,12 @@
  #
  # See the LICENSE file in the root of this project for details.
 #}
-<!DOCTYPE html>
-{% block htmlClass %}
-    {% if htmlClass is defined %}
-<html lang="en" class="{{ htmlClass }}">
-{% else %}
-<html lang="en">
-{% endif %}
-{% endblock %}
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    {% block pageDescription %}
-        {% if pageDescription is defined %}
-            <meta name="description" content="{{ pageDescription }}"/>
-        {% endif %}
-    {% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block rendering_library %}
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="image_src" href="{{ asset('images/adlogo.jpg') }}"/>
-
-    {% block pageKeywords %}
-        {% if pageKeywords is defined %}
-            <meta name="keywords" content="{{ pageKeywords }}"/>
-        {% endif %}
-    {% endblock %}
-    <meta name="author" content="Anime Twin Cities, Inc."/>
-
-    <link href="http://www.animedetour.com/rss" rel="alternate" type="application/rss+xml"
-          title="Anime Detour RSS Feed"/>
 
     <link href="{{ asset('node_modules/mdbootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('node_modules/mdbootstrap/css/mdb.min.css') }}" rel="stylesheet">
@@ -43,46 +20,37 @@
     <link rel="stylesheet" media="screen" type="text/css" href="{{ asset('styles/compiled/global.css') }}"/>
 
     <link rel="stylesheet" media="screen" type="text/css" href="{{ asset('styles/detour.css') }}"/>
-    {% block additional_css %}
-    {% endblock %}
 
     <!-- JQuery -->
     <script type="text/javascript" src="{{ asset('node_modules/mdbootstrap/js/jquery-3.2.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
-
-    <title>
-        {% block title %}
-            {% if pageTitle is defined %}
-                {{ pageTitle }} -
-            {% endif %}
-            Anime Detour Registration System
-        {% endblock %}
-    </title>
-</head>
-
-{% block bodyClass %}
-{% if bodyClass is defined %}
-<body class="fixed-sn {{ bodyClass }}">
-{% else %}
-<body class="fixed-sn">
-{% endif %}
 {% endblock %}
-<header>
-    {% include 'Backend/template/sidebar.html.twig' %}
 
-    {% block headerAddition %}
-    {% endblock %}
-</header>
+{% block html_body %}
 
-{% block contentBlock %}
-{% if bodyClass is defined %}
-<div class="">
-    {% else %}
-    <div class="detour_view">
+    {% block bodyClass %}
+        {% if bodyClass is defined %}
+            <body class="fixed-sn {{ bodyClass }}">
+        {% else %}
+            <body class="fixed-sn">
         {% endif %}
+    {% endblock %}
+    <header>
+        {% include 'Backend/template/sidebar.html.twig' %}
+
+        {% block headerAddition %}
         {% endblock %}
-        {% block body %}
-        {% endblock %}
+    </header>
+
+    {% block contentBlock %}
+        {% if bodyClass is defined %}
+    <div class="">
+        {% else %}
+        <div class="detour_view">
+        {% endif %}
+    {% endblock %}
+    {% block body %}
+    {% endblock %}
     </div>
 
     {% include 'Backend/template/footer.html.twig' %}
@@ -102,5 +70,6 @@
     {% endblock %}
 
 
-</body>
-</html>
+    </body>
+
+{% endblock %}
