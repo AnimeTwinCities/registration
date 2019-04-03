@@ -1,0 +1,27 @@
+{##
+ # Copyright (c) 2018. Anime Twin Cities, Inc.
+ #
+ # This project, including all of the files and their contents, is licensed under the terms of MIT License
+ #
+ # See the LICENSE file in the root of this project for details.
+#}
+{% extends 'detour_vue.html.twig' %}
+
+{% block body %}
+    <div id="app">
+        <v-toolbar class="blue-grey">
+            <v-toolbar-title>Login</v-toolbar-title>
+        </v-toolbar>
+        <v-app>
+            <v-content>
+                <v-container>Hello world</v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script>
+        new Vue({ el: '#app' })
+    </script>
+{% endblock %}
