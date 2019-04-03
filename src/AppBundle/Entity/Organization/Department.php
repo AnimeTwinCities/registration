@@ -35,6 +35,11 @@ class Department
         $this->childDepartments = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     /**
      * @var integer
      *
@@ -170,7 +175,7 @@ class Department
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -186,7 +191,7 @@ class Department
     /**
      * @param string $externalEmail
      */
-    public function setExternalEmail(string $externalEmail): void
+    public function setExternalEmail(?string $externalEmail): void
     {
         $this->externalEmail = $externalEmail;
     }
@@ -218,7 +223,7 @@ class Department
     /**
      * @param string $internalEmail
      */
-    public function setInternalEmail(string $internalEmail): void
+    public function setInternalEmail(?string $internalEmail): void
     {
         $this->internalEmail = $internalEmail;
     }

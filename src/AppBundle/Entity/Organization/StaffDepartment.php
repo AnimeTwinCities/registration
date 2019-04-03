@@ -177,7 +177,7 @@ class StaffDepartment
     /**
      * @return string
      */
-    public function getPosition(): string
+    public function getPosition(): ?string
     {
         return $this->position;
     }
@@ -185,7 +185,7 @@ class StaffDepartment
     /**
      * @param string $position
      */
-    public function setPosition(string $position): void
+    public function setPosition(?string $position): void
     {
         $this->position = $position;
     }
@@ -193,7 +193,7 @@ class StaffDepartment
     /**
      * @return string
      */
-    public function getNotes(): string
+    public function getNotes(): ?string
     {
         return $this->notes;
     }
@@ -201,7 +201,7 @@ class StaffDepartment
     /**
      * @param string $notes
      */
-    public function setNotes(string $notes): void
+    public function setNotes(?string $notes): void
     {
         $this->notes = $notes;
     }

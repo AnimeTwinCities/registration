@@ -210,7 +210,7 @@ class Staff
     /**
      * @return string
      */
-    public function getNickName(): string
+    public function getNickName(): ?string
     {
         return $this->nickName;
     }
@@ -218,7 +218,7 @@ class Staff
     /**
      * @param string $nickName
      */
-    public function setNickName(string $nickName): void
+    public function setNickName(?string $nickName): void
     {
         $this->nickName = $nickName;
     }
@@ -226,7 +226,7 @@ class Staff
     /**
      * @return string
      */
-    public function getPhoneNumber(): string
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
@@ -234,7 +234,7 @@ class Staff
     /**
      * @param string $phoneNumber
      */
-    public function setPhoneNumber(string $phoneNumber): void
+    public function setPhoneNumber(?string $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
     }
@@ -258,7 +258,7 @@ class Staff
     /**
      * @return string
      */
-    public function getPersonalEmail(): string
+    public function getPersonalEmail(): ?string
     {
         return $this->personalEmail;
     }
@@ -266,7 +266,7 @@ class Staff
     /**
      * @param string $personalEmail
      */
-    public function setPersonalEmail(string $personalEmail): void
+    public function setPersonalEmail(?string $personalEmail): void
     {
         $this->personalEmail = $personalEmail;
     }
@@ -274,7 +274,7 @@ class Staff
     /**
      * @return string
      */
-    public function getOfficialEmail(): string
+    public function getOfficialEmail(): ?string
     {
         return $this->officialEmail;
     }
@@ -282,7 +282,7 @@ class Staff
     /**
      * @param string $officialEmail
      */
-    public function setOfficialEmail(string $officialEmail): void
+    public function setOfficialEmail(?string $officialEmail): void
     {
         $this->officialEmail = $officialEmail;
     }
@@ -290,7 +290,7 @@ class Staff
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -298,7 +298,7 @@ class Staff
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -306,7 +306,7 @@ class Staff
     /**
      * @return string
      */
-    public function getShirtSize(): string
+    public function getShirtSize(): ?string
     {
         return $this->shirtSize;
     }
@@ -314,7 +314,7 @@ class Staff
     /**
      * @param string $shirtSize
      */
-    public function setShirtSize(string $shirtSize): void
+    public function setShirtSize(?string $shirtSize): void
     {
         $this->shirtSize = $shirtSize;
     }
@@ -322,7 +322,7 @@ class Staff
     /**
      * @return string
      */
-    public function getShirtType(): string
+    public function getShirtType(): ?string
     {
         return $this->shirtType;
     }
@@ -330,7 +330,7 @@ class Staff
     /**
      * @param string $shirtType
      */
-    public function setShirtType(string $shirtType): void
+    public function setShirtType(?string $shirtType): void
     {
         $this->shirtType = $shirtType;
     }
@@ -370,7 +370,7 @@ class Staff
     /**
      * @return string
      */
-    public function getIntakeFormFile(): string
+    public function getIntakeFormFile(): ?string
     {
         return $this->intakeFormFile;
     }
@@ -378,7 +378,7 @@ class Staff
     /**
      * @param string $intakeFormFile
      */
-    public function setIntakeFormFile(string $intakeFormFile): void
+    public function setIntakeFormFile(?string $intakeFormFile): void
     {
         $this->intakeFormFile = $intakeFormFile;
     }

@@ -8,12 +8,14 @@ easy_admin:
                 fields:
                     - { property: 'name' }
                     - { property: 'description' }
+                    - { property: 'parentDepartment' }
                     - { property: 'externalEmail' }
                     - { property: 'active', type: 'boolean' }
             form:
                 fields:
                     - { property: 'name' }
                     - { property: 'description' }
+                    - { property: 'parentDepartment' }
                     - { property: 'externalEmail' }
                     - { property: 'allStaffReceiveExternalEmail' }
                     - { property: 'internalEmail' }

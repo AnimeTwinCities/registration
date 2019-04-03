@@ -115,7 +115,7 @@ class DepartmentHistory
     /**
      * @return string
      */
-    public function getChangeText(): string
+    public function getChangeText(): ?string
     {
         return $this->changeText;
     }
@@ -123,7 +123,7 @@ class DepartmentHistory
     /**
      * @param string $changeText
      */
-    public function setChangeText(string $changeText): void
+    public function setChangeText(?string $changeText): void
     {
         $this->changeText = $changeText;
     }
