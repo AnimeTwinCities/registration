@@ -5,107 +5,94 @@
  #
  # See the LICENSE file in the root of this project for details.
 #}
-{% extends 'detour_vue.html.twig' %}
+{% extends 'detour.html.twig' %}
+
+{% set pageTitle = 'Staff List' %}
+
+{% block additional_javascript %}
+    <script type="text/javascript"
+            src="{{ asset('node_modules/mdbootstrap/js/addons/datatables.min.js') }}"></script>
+{% endblock %}
+
+{% block additional_css %}
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="{{ asset('node_modules/mdbootstrap/css/addons/datatables.min.css') }}"/>
+{% endblock %}
 
 {% block body %}
-    <div id="app">
-        <v-app light>
-            <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher app dark class="primary lighten-3">
-                <v-list>
-                    <v-list-group v-for="item in items" :value="item.active" :key="item.title">
-                        <v-list-tile slot="item"
-                                     :to="item.path == '#' ? '' : item.path"
-                                     :exact="item.exact"
-                                     class="yellow--text"
-                                     active-class="red--text">
-                            <v-list-tile-action>
-                                <v-icon>X{{ "{{ item.action }}" }}</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title >X{{ "{{ item.title }}" }}</v-list-tile-title>
-                            </v-list-tile-content>
-                            <v-list-tile-action v-if="item.items.length > 0">
-                                <v-icon>keyboard_arrow_down</v-icon>
-                            </v-list-tile-action>
-                        </v-list-tile>
-                    </v-list-group>
-                </v-list>
-            </v-navigation-drawer>
-            <v-toolbar fixed app :clipped-left="clipped">
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <v-toolbar-title>Topics</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon>
-                    <v-icon>more_vert</v-icon>
-                </v-btn>
-            </v-toolbar>
-            <v-content>
-                <v-container fluid>
-                    <router-view></router-view>
-                </v-container>
-            </v-content>
-        </v-app>
-        <v-app>
-            <v-content>
-                <v-container>Hello world</v-container>
-            </v-content>
-        </v-app>
+<div class="container bg-white">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Staff List</h2>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
-    <script>
-        new Vue({ el: '#app' });
-    </script>
-    <script lang="ts">
-        Vue.use(Vuetify, {
-            theme: {
-                primary: '#b71c1c',
-                secondary: '#b0bec5',
-                accent: '#8c9eff',
-                error: '#b71c1c'
-            }
-        });
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th class="th-sm">Name</th>
+                    <th class="th-sm">Position</th>
+                    <th class="th-sm">Office</th>
+                    <th class="th-sm">Extn.</th>
+                    <th class="th-sm">Start date</th>
+                    <th class="th-sm">Salary</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th class="noDropdown"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
-        const Attractions = { template: '<div>Attractions</div>' }
-        const Breakfast = { template: '<div>Breakfast</div>' }
-        const Meat = { template: '<div>Meat</div>' }
-        const Sushi = { template: '<div>Sushi</div>' }
 
-        const routes = [
-            { path: '/', component: Attractions },
-            { path: '/breakfast', component: Breakfast },
-            { path: '/meat', component: Meat },
-            { path: '/sushi', component: Sushi },
-        ]
+<script>
+$(document).ready(function() {
+    console.log('test');
+    $('#example').DataTable( {
 
-        const router = new VueRouter({
-            routes // short for `routes: routes`
-        })
+        initComplete: function () {
+            this.api().columns().every( function () {
+                var column = this;
+                if(!$(column.footer()).hasClass('noDropdown')) {
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
 
-        new Vue({
-            el: '#app',
-            router,
-            data () {
-                return {
-                    drawer: true,
-                    clipped: false,
-                    items: [
-                        {
-                            action: 'local_activity',
-                            title: 'Attractions',
-                            path: '/',
-                            items: [],
-                        },
-                        {
-                            action: 'restaurant',
-                            title: 'Breakfast',
-                            path: '/breakfast',
-                            items: []
-                        },
-                    ]
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } else {
+                    $(column.footer()).empty();
                 }
-            }
-        });
-    </script>
+            } );
+        },
+        "ajax": "{{ path('ajax_staff_list') }}"
+    } );
+    $('.dataTables_length').addClass('bs-select');
+} );
+</script>
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+    </style>
 {% endblock %}
