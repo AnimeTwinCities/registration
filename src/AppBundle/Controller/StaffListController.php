@@ -47,9 +47,12 @@ class StaffListController extends Controller
         foreach ($staffList as $staff) {
             $departments = $staff->getDepartments();
             $primaryDepartment = null;
+            $otherDepartments = [];
             foreach ($departments as $department) {
                 if ($department->isPrimary()) {
                     $primaryDepartment = $department;
+                } else {
+                    $otherDepartments[] = $department->getDepartment()->getName();
                 }
             }
 
@@ -62,6 +65,11 @@ class StaffListController extends Controller
                     $primaryDepartment->getDepartment()->getName() : 'No Primary Department',
                 'description' => $staff->getDescription(),
                 'official_email' => $staff->getOfficialEmail(),
+                'personal_email' => $staff->getPersonalEmail(),
+                'phone' => $staff->getPhoneNumber(),
+                'dob' => $staff->getDateOfBirth()->format('F j Y'),
+                'shirt' => "{$staff->getShirtType()} {$staff->getShirtSize()}",
+                'other_departments' => implode(', ', $otherDepartments),
             ];
         }
 

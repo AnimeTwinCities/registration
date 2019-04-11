@@ -29,12 +29,12 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th></th>
-                    <th>First Name</th>
                     <th>Last Name</th>
+                    <th>First Name</th>
                     <th>Nickname</th>
                     <th>Department</th>
                     <th>Official Email</th>
@@ -62,18 +62,37 @@
 function format ( d ) {
     // `d` is the original data object for the row
 
+    var full_name = d.first_name+' '+d.last_name;
+    if (d.nickname) {
+        full_name = d.first_name+' "'+d.nickname+'" '+d.last_name;
+    }
+
     return '<table width="90%" cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">'+
                 '<tr>'+
-                    '<td>Full name:</td>'+
-                    '<td>'+d.name+'</td>'+
+                    '<td style="background-color: black; width:2px;"></td>'+
+                    '<th>Full name:</th>'+
+                    '<td>'+full_name+'</td>'+
+                    '<th>Date of Birth:</th>'+
+                    '<td>'+d.dob+'</td>'+
                 '</tr>'+
                 '<tr>'+
-                    '<td>Description:</td>'+
+                    '<td style="background-color: black; width:2px;"></td>'+
+                    '<th>Phone:</th>'+
+                    '<td>'+d.phone+'</td>'+
+                    '<th>Personal Email:</th>'+
+                    '<td>'+d.personal_email+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td style="background-color: black; width:2px;"></td>'+
+                    '<th>Description:</th>'+
                     '<td>'+d.description+'</td>'+
+                    '<th>Shirt Size:</th>'+
+                    '<td>'+d.shirt+'</td>'+
                 '</tr>'+
                 '<tr>'+
-                    '<td>Extra info:</td>'+
-                    '<td>And any further details here (intake form, shirts, etc etc)...</td>'+
+                    '<td style="background-color: black; width:2px;"></td>'+
+                    '<th>Other Departments:</th>'+
+                    '<td colspan="3">'+d.other_departments+'</td>'+
                 '</tr>'+
         '</table>';
 }
@@ -116,14 +135,14 @@ $(document).ready(function() {
                 },
                 width:"15px"
             },
-            { "data": "first_name" },
             { "data": "last_name" },
+            { "data": "first_name" },
             { "data": "nickname" },
             { "data": "department" },
             { "data": "official_email", "orderable": false }
         ],
         "ajax": "{{ path('ajax_staff_list') }}",
-        "order": [[2, 'asc']]
+        "order": [[1, 'asc']]
     } );
 
     // Add event listener for opening and closing details
