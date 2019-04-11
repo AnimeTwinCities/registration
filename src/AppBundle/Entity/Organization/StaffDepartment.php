@@ -41,7 +41,7 @@ class StaffDepartment
     /**
      * @var Staff
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff", inversedBy="departments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
      * })

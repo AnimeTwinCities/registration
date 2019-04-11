@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Organization\Staff;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,34 +39,32 @@ class StaffListController extends Controller
      */
     public function ajaxStaffList()
     {
-        $returnArray = [
-            "data" => [
-                [
-                    "Tiger Nixon",
-                    "System Architect",
-                    "Edinburgh",
-                    "5421",
-                    "2011/04/25",
-                    "$320,800"
-                ],
-                [
-                    "Garrett Winters",
-                    "Accountant",
-                    "Tokyo",
-                    "8422",
-                    "2011/07/25",
-                    "$170,750"
-                ],
-                [
-                    "Ashton Cox",
-                    "Junior Technical Author",
-                    "San Francisco",
-                    "1562",
-                    "2009/01/12",
-                    "$86,000"
-                ],
-            ]
-        ];
+        $staffList = $this->getDoctrine()
+            ->getRepository(Staff::class)
+            ->findAll();
+
+        $returnArray = ['data' => []];
+        foreach ($staffList as $staff) {
+            $departments = $staff->getDepartments();
+            $primaryDepartment = null;
+            foreach ($departments as $department) {
+                if ($department->isPrimary()) {
+                    $primaryDepartment = $department;
+                }
+            }
+
+            $returnArray['data'][] = [
+                'id' => $staff->getId(),
+                'first_name' => $staff->getFirstName(),
+                'last_name' => $staff->getLastName(),
+                'nickname' => $staff->getNickName(),
+                'department' => $primaryDepartment ?
+                    $primaryDepartment->getDepartment()->getName() : 'No Primary Department',
+                'description' => $staff->getDescription(),
+                'official_email' => $staff->getOfficialEmail(),
+            ];
+        }
+
         return $this->json($returnArray);
     }
 }

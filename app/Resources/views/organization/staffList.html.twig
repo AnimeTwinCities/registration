@@ -32,22 +32,22 @@
             <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                 <tr>
-                    <th class="th-sm">Name</th>
-                    <th class="th-sm">Position</th>
-                    <th class="th-sm">Office</th>
-                    <th class="th-sm">Extn.</th>
-                    <th class="th-sm">Start date</th>
-                    <th class="th-sm">Salary</th>
+                    <th></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Nickname</th>
+                    <th>Department</th>
+                    <th>Official Email</th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
                     <th class="noDropdown"></th>
+                    <th class="noDropdown"></th>
+                    <th class="noDropdown"></th>
+                    <th class="noDropdown"></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th class="noDropdown"></th>
                 </tr>
                 </tfoot>
             </table>
@@ -57,10 +57,29 @@
 
 
 <script>
-$(document).ready(function() {
-    console.log('test');
-    $('#example').DataTable( {
 
+/* Formatting function for row details - modify as you need */
+function format ( d ) {
+    // `d` is the original data object for the row
+
+    return '<table width="90%" cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;">'+
+                '<tr>'+
+                    '<td>Full name:</td>'+
+                    '<td>'+d.name+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Description:</td>'+
+                    '<td>'+d.description+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Extra info:</td>'+
+                    '<td>And any further details here (intake form, shirts, etc etc)...</td>'+
+                '</tr>'+
+        '</table>';
+}
+
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
         initComplete: function () {
             this.api().columns().every( function () {
                 var column = this;
@@ -85,14 +104,77 @@ $(document).ready(function() {
                 }
             } );
         },
-        "ajax": "{{ path('ajax_staff_list') }}"
+        select:"single",
+        "columns": [
+            {
+                "className": 'details-control no_selection',
+                "orderable": false,
+                "data": null,
+                "defaultContent": '',
+                "render": function () {
+                    return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                },
+                width:"15px"
+            },
+            { "data": "first_name" },
+            { "data": "last_name" },
+            { "data": "nickname" },
+            { "data": "department" },
+            { "data": "official_email", "orderable": false }
+        ],
+        "ajax": "{{ path('ajax_staff_list') }}",
+        "order": [[2, 'asc']]
     } );
+
+    // Add event listener for opening and closing details
+    $('#example tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var tdi = tr.find("svg");
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-minus-square');
+            tdi.first().addClass('fa-plus-square');
+        }
+        else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+            console.log(tdi);
+            tdi.first().removeClass('fa-plus-square');
+            tdi.first().addClass('fa-minus-square');
+        }
+    });
+
+    table.on("user-select", function (e, dt, type, cell, originalEvent) {
+        if ($(cell.node()).hasClass("details-control")) {
+            e.preventDefault();
+        }
+    });
     $('.dataTables_length').addClass('bs-select');
 } );
 </script>
     <style>
         tfoot {
             display: table-header-group;
+        }
+        td.details-control {
+            text-align:center;
+            color:forestgreen;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            text-align:center;
+            color:red;
+        }
+        td.no_selection {
+            -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+            -moz-user-select: none; /* mozilla browsers */
+            -khtml-user-select: none; /* webkit (konqueror) browsers */
+            -ms-user-select: none; /* IE10+ */
         }
     </style>
 {% endblock %}

@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace AppBundle\Entity\Organization;
 
 
+use AppBundle\Entity\Registration;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
 
@@ -129,9 +131,18 @@ class Staff
     private $intakeFormFile;
 
     /**
+     * @var Registration[]
+     *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Registration", mappedBy="staffMember")
      */
     private $registrations;
+
+    /**
+     * @var StaffDepartment[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\StaffDepartment", mappedBy="staff")
+     */
+    private $departments;
 
     /**
      * @var User
@@ -166,6 +177,11 @@ class Staff
      * })
      */
     private $modifiedBy;
+
+    public function __construct()
+    {
+        $this->departments = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -397,6 +413,38 @@ class Staff
     public function setRegistrations($registrations): void
     {
         $this->registrations = $registrations;
+    }
+
+    /**
+     * @return StaffDepartment[]
+     */
+    public function getDepartments()
+    {
+        return $this->departments;
+    }
+
+    /**
+     * @param StaffDepartment[] $departments
+     */
+    public function setDepartments(array $departments): void
+    {
+        $this->departments = $departments;
+    }
+
+    /**
+     * @param StaffDepartment $staffDepartment
+     */
+    public function addRegistrationShirt(StaffDepartment $staffDepartment)
+    {
+        $this->departments->add($staffDepartment);
+    }
+
+    /**
+     * @param StaffDepartment $staffDepartment
+     */
+    public function removeRegistrationShirt(StaffDepartment $staffDepartment)
+    {
+        $this->departments->removeElement($staffDepartment);
     }
 
     /**
