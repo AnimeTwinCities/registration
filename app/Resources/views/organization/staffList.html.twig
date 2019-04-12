@@ -29,7 +29,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <table id="staffList" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th></th>
@@ -37,7 +37,9 @@
                     <th>First Name</th>
                     <th>Nickname</th>
                     <th>Department</th>
+                    <th>Position</th>
                     <th>Official Email</th>
+                    <th>Edit</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -47,6 +49,8 @@
                     <th class="noDropdown"></th>
                     <th class="noDropdown"></th>
                     <th></th>
+                    <th class="noDropdown"></th>
+                    <th class="noDropdown"></th>
                     <th class="noDropdown"></th>
                 </tr>
                 </tfoot>
@@ -98,7 +102,7 @@ function format ( d ) {
 }
 
 $(document).ready(function() {
-    var table = $('#example').DataTable( {
+    var table = $('#staffList').DataTable( {
         initComplete: function () {
             this.api().columns().every( function () {
                 var column = this;
@@ -115,14 +119,59 @@ $(document).ready(function() {
                                 .draw();
                         } );
 
-                    column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    sortDepartmentObject = function(x,y) {
+                        // to change to descending order switch "<" for ">"
+                        return x.name > y.name ? 1 : -1;
+                    };
+                    column.data().unique().sort(sortDepartmentObject).each( function ( d, j ) {
+                        select.append( '<option value="'+d.name+'">'+d.name+'</option>' )
                     } );
                 } else {
                     $(column.footer()).empty();
                 }
             } );
+            $("div.toolbar")
+                .html(' <div class="custom-control custom-switch">'+
+                        '<input type="checkbox" class="custom-control-input" id="showInactiveStaff">'+
+                        '<label class="custom-control-label" for="showInactiveStaff">Show inactive staff</label>'+
+                    '</div>');
+            $('#showInactiveStaff').change(function() {
+                if(this.checked) {
+                    table.ajax.url( '{{ path('ajax_staff_list') }}?showInactive=true' ).load();
+                } else {
+                    table.ajax.url( '{{ path('ajax_staff_list') }}?showInactive=false' ).load();
+                }
+            });
         },
+    {# This works better than calling it in initComplete as if we reload the list from inactive staffers
+               it will then add missing departments to the list.... however the dropdown won't show what
+               we are sorting on for a bad experience. Leaving it here for now.
+        "drawCallback": function () {
+            this.api().columns().every( function () {
+                var column = this;
+                if(!$(column.footer()).hasClass('noDropdown')) {
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d.name+'">'+d.name+'</option>' )
+                    } );
+                } else {
+                    $(column.footer()).empty();
+                }
+            } );
+        }, #}
+        dom: 'l<"toolbar">frtip',
+        "lengthMenu": [[50, 100, 200, -1], [50, 100, 200, "All"]],
         select:"single",
         "columns": [
             {
@@ -138,15 +187,30 @@ $(document).ready(function() {
             { "data": "last_name" },
             { "data": "first_name" },
             { "data": "nickname" },
-            { "data": "department" },
-            { "data": "official_email", "orderable": false }
+            {
+                "targets": 2,
+                "data": 'department',
+                "render": function (data, type, row) {
+                    return '<a href="{{ path('org_department_view_noId') }}'+data.id + '">' + data.name + '</a>';
+                }
+            },
+            { "data": "position" },
+            { "data": "official_email", "orderable": false },
+            {
+                "targets": 1,
+                "data": 'id',
+                "title": 'Edit',
+                "render": function (data, type, row) {
+                    return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">Edit</a>';
+                }
+            }
         ],
         "ajax": "{{ path('ajax_staff_list') }}",
         "order": [[1, 'asc']]
     } );
 
     // Add event listener for opening and closing details
-    $('#example tbody').on('click', 'td.details-control', function () {
+    $('#staffList tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var tdi = tr.find("svg");
         var row = table.row(tr);
@@ -194,6 +258,20 @@ $(document).ready(function() {
             -moz-user-select: none; /* mozilla browsers */
             -khtml-user-select: none; /* webkit (konqueror) browsers */
             -ms-user-select: none; /* IE10+ */
+        }
+        .dataTables_length {
+            float:left;
+        }
+
+        .toolbar {
+            padding-left: 1rem;
+            float:left;
+        }
+        .toolbar>div>label {
+            margin-top: .7rem;
+        }
+        table.table a {
+            color: black;
         }
     </style>
 {% endblock %}

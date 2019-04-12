@@ -15,6 +15,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Organization\Staff;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,13 +36,26 @@ class StaffListController extends Controller
      * @Route("/ajax/staff-list", name="ajax_staff_list")
      * @Security("has_role('ROLE_USER')")
      *
+     * @param Request $request
      * @return Response
      */
-    public function ajaxStaffList()
+    public function ajaxStaffList(Request $request)
     {
-        $staffList = $this->getDoctrine()
-            ->getRepository(Staff::class)
-            ->findAll();
+        $findAll = false;
+        if ($request->query->has('showInactive')) {
+            $showInactive = trim($request->query->get('showInactive'));
+            $findAll = $showInactive == 'true';
+        }
+
+        if ($findAll) {
+            $staffList = $this->getDoctrine()
+                ->getRepository(Staff::class)
+                ->findAll();
+        } else {
+            $staffList = $this->getDoctrine()
+                ->getRepository(Staff::class)
+                ->findAllActive();
+        }
 
         $returnArray = ['data' => []];
         foreach ($staffList as $staff) {
@@ -61,8 +75,14 @@ class StaffListController extends Controller
                 'first_name' => $staff->getFirstName(),
                 'last_name' => $staff->getLastName(),
                 'nickname' => $staff->getNickName(),
-                'department' => $primaryDepartment ?
-                    $primaryDepartment->getDepartment()->getName() : 'No Primary Department',
+                'department' => [
+                    'id' => $primaryDepartment ?
+                        $primaryDepartment->getDepartment()->getId() : '',
+                    'name' => $primaryDepartment ?
+                        $primaryDepartment->getDepartment()->getName() : 'No Primary Department',
+                ],
+                'position' => $primaryDepartment ?
+                    $primaryDepartment->getPosition() : '',
                 'description' => $staff->getDescription(),
                 'official_email' => $staff->getOfficialEmail(),
                 'personal_email' => $staff->getPersonalEmail(),
@@ -74,5 +94,31 @@ class StaffListController extends Controller
         }
 
         return $this->json($returnArray);
+    }
+
+    /**
+     * @Route("/org/department/view/", name="org_department_view_noId")
+     * @Route("/org/department/view/{id}", name="org_department_view")
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param string $id
+     * @return Response
+     */
+    public function viewDepartment($id)
+    {
+        return $this->json(['department']);
+    }
+
+    /**
+     * @Route("/org/staff/view/", name="org_staff_view_noId")
+     * @Route("/org/staff/view/{id}", name="org_staff_view")
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param string $id
+     * @return Response
+     */
+    public function viewStaff($id)
+    {
+        return $this->json(['staff']);
     }
 }

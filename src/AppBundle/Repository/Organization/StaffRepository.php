@@ -12,9 +12,16 @@ declare(strict_types=1);
 namespace AppBundle\Repository\Organization;
 
 
+use AppBundle\Entity\Organization\Staff;
 use Doctrine\ORM\EntityRepository;
 
 class StaffRepository extends EntityRepository
 {
-
+    /**
+     * @return Staff[]
+     */
+    public function findAllActive()
+    {
+        return $this->findBy(['active' => true]);
+    }
 }
