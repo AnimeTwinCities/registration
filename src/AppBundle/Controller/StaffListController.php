@@ -66,7 +66,11 @@ class StaffListController extends Controller
                 if ($department->isPrimary()) {
                     $primaryDepartment = $department;
                 } else {
-                    $otherDepartments[] = $department->getDepartment()->getName();
+                    $departmentName = $department->getDepartment()->getName();
+                    if ($department->getPosition()) {
+                        $departmentName .= " ({$department->getPosition()})";
+                    }
+                    $otherDepartments[] = $departmentName;
                 }
             }
 
@@ -90,6 +94,7 @@ class StaffListController extends Controller
                 'dob' => $staff->getDateOfBirth()->format('F j Y'),
                 'shirt' => "{$staff->getShirtType()} {$staff->getShirtSize()}",
                 'other_departments' => implode(', ', $otherDepartments),
+                'is_registered' => $staff->getActiveRegistration() ? true : false,
             ];
         }
 

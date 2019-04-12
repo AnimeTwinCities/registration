@@ -131,7 +131,7 @@ class Staff
     private $intakeFormFile;
 
     /**
-     * @var Registration[]
+     * @var Registration[]|\Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Registration", mappedBy="staffMember")
      */
@@ -181,6 +181,7 @@ class Staff
     public function __construct()
     {
         $this->departments = new ArrayCollection();
+        $this->registrations = new ArrayCollection();
     }
 
     /**
@@ -400,7 +401,7 @@ class Staff
     }
 
     /**
-     * @return mixed
+     * @return Registration[]
      */
     public function getRegistrations()
     {
@@ -408,11 +409,41 @@ class Staff
     }
 
     /**
-     * @param mixed $registrations
+     * @return Registration
+     */
+    public function getActiveRegistration() : ?Registration
+    {
+        foreach ($this->getRegistrations() as $registration) {
+            if ($registration->getEvent()->getActive()) {
+                return $registration;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Registration $registrations
      */
     public function setRegistrations($registrations): void
     {
         $this->registrations = $registrations;
+    }
+
+    /**
+     * @param Registration $registration
+     */
+    public function addRegistration(Registration $registration)
+    {
+        $this->departments->add($registration);
+    }
+
+    /**
+     * @param Registration $registration
+     */
+    public function removeRegistration(Registration $registration)
+    {
+        $this->departments->removeElement($registration);
     }
 
     /**
@@ -434,7 +465,7 @@ class Staff
     /**
      * @param StaffDepartment $staffDepartment
      */
-    public function addRegistrationShirt(StaffDepartment $staffDepartment)
+    public function addDepartment(StaffDepartment $staffDepartment)
     {
         $this->departments->add($staffDepartment);
     }
@@ -442,7 +473,7 @@ class Staff
     /**
      * @param StaffDepartment $staffDepartment
      */
-    public function removeRegistrationShirt(StaffDepartment $staffDepartment)
+    public function removeDepartment(StaffDepartment $staffDepartment)
     {
         $this->departments->removeElement($staffDepartment);
     }

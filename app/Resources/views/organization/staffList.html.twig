@@ -39,7 +39,8 @@
                     <th>Department</th>
                     <th>Position</th>
                     <th>Official Email</th>
-                    <th>Edit</th>
+                    <th>Registered</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -51,6 +52,7 @@
                     <th></th>
                     <th class="noDropdown"></th>
                     <th class="noDropdown"></th>
+                    <th></th>
                     <th class="noDropdown"></th>
                 </tr>
                 </tfoot>
@@ -119,13 +121,23 @@ $(document).ready(function() {
                                 .draw();
                         } );
 
-                    sortDepartmentObject = function(x,y) {
-                        // to change to descending order switch "<" for ">"
-                        return x.name > y.name ? 1 : -1;
-                    };
-                    column.data().unique().sort(sortDepartmentObject).each( function ( d, j ) {
-                        select.append( '<option value="'+d.name+'">'+d.name+'</option>' )
-                    } );
+                    if ($(column.header()).html() === 'Department') {
+                        var sortDepartmentObject = function (x, y) {
+                            // to change to descending order switch "<" for ">"
+                            return x.name > y.name ? 1 : -1;
+                        };
+                        column.data().unique().sort(sortDepartmentObject).each(function (d, j) {
+                            select.append('<option value="' + d.name + '">' + d.name + '</option>')
+                        });
+                    } else {
+                        column.data().unique().sort().each(function (d, j) {
+                            var filterName = d;
+                            if (typeof d === 'boolean') {
+                                filterName = d ? 'Yes' : 'No';
+                            }
+                            select.append('<option value="' + filterName + '">' + filterName + '</option>')
+                        });
+                    }
                 } else {
                     $(column.footer()).empty();
                 }
@@ -198,10 +210,23 @@ $(document).ready(function() {
             { "data": "official_email", "orderable": false },
             {
                 "targets": 1,
-                "data": 'id',
-                "title": 'Edit',
+                "data": 'is_registered',
+                "title": 'Registered?',
                 "render": function (data, type, row) {
-                    return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">Edit</a>';
+                    if (data) {
+                        return '<i class="fa fa-check-circle" aria-hidden="true"></i> Yes';
+                    } else {
+                        return '<i class="fa fa-minus-circle" aria-hidden="true"></i> No';
+                    }
+                }
+            },
+            {
+                "orderable": false,
+                "targets": 1,
+                "data": 'id',
+                "title": '',
+                "render": function (data, type, row) {
+                    return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">View</a>';
                 }
             }
         ],
@@ -252,6 +277,12 @@ $(document).ready(function() {
         tr.shown td.details-control {
             text-align:center;
             color:red;
+        }
+        .fa-check-circle {
+            color: forestgreen;
+        }
+        .fa-minus-circle {
+            color: red;
         }
         td.no_selection {
             -webkit-user-select: none; /* webkit (safari, chrome) browsers */
