@@ -40,6 +40,7 @@
                     <th>Position</th>
                     <th>Official Email</th>
                     <th>Registered</th>
+                    <th>Active</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -52,7 +53,8 @@
                     <th></th>
                     <th class="noDropdown"></th>
                     <th class="noDropdown"></th>
-                    <th></th>
+                    <th class="noDropdown"></th>
+                    <th class="noDropdown"></th>
                     <th class="noDropdown"></th>
                 </tr>
                 </tfoot>
@@ -133,9 +135,14 @@ $(document).ready(function() {
                         column.data().unique().sort().each(function (d, j) {
                             var filterName = d;
                             if (typeof d === 'boolean') {
-                                filterName = d ? 'Yes' : 'No';
+                                if (select.html() === '<option value=""></option>') {
+                                    // Only append opentions when Yes/No aren't in the list yet
+                                    select.append('<option value="' + filterName + '">Yes</option>');
+                                    select.append('<option value="' + filterName + '">No</option>');
+                                }
+                            } else {
+                                select.append('<option value="' + filterName + '">' + filterName + '</option>');
                             }
-                            select.append('<option value="' + filterName + '">' + filterName + '</option>')
                         });
                     }
                 } else {
@@ -214,6 +221,18 @@ $(document).ready(function() {
                 "targets": 1,
                 "data": 'is_registered',
                 "title": 'Registered?',
+                "render": function (data, type, row) {
+                    if (data) {
+                        return '<i class="fa fa-check-circle" aria-hidden="true"></i> Yes';
+                    } else {
+                        return '<i class="fa fa-minus-circle" aria-hidden="true"></i> No';
+                    }
+                }
+            },
+            {
+                "targets": 1,
+                "data": 'is_active',
+                "title": 'Active?',
                 "render": function (data, type, row) {
                     if (data) {
                         return '<i class="fa fa-check-circle" aria-hidden="true"></i> Yes';

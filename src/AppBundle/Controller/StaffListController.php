@@ -97,6 +97,7 @@ class StaffListController extends Controller
                 'shirt' => "{$staff->getShirtType()} {$staff->getShirtSize()}",
                 'other_departments' => implode(', ', $otherDepartments),
                 'is_registered' => $staff->getActiveRegistration() ? true : false,
+                'is_active' => $staff->isActive() ? true : false,
             ];
         }
 
