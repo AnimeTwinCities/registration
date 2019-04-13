@@ -147,6 +147,8 @@ $(document).ready(function() {
                         '<input type="checkbox" class="custom-control-input" id="showInactiveStaff">'+
                         '<label class="custom-control-label" for="showInactiveStaff">Show inactive staff</label>'+
                     '</div>');
+            $("div.fbar")
+                .html('<a href="" class="btn btn-primary btn-sm text-white">Add Staff</a>');
             $('#showInactiveStaff').change(function() {
                 if(this.checked) {
                     table.ajax.url( '{{ path('ajax_staff_list') }}?showInactive=true' ).load();
@@ -182,7 +184,7 @@ $(document).ready(function() {
                 }
             } );
         }, #}
-        dom: 'l<"toolbar">frtip',
+        dom: '<"row"<"col-md-12"l<"toolbar">f>><"row"<"col-md-12"rt>><"row"<"col-md-12"i<"fbar">p>>',
         "lengthMenu": [[50, 100, 200, -1], [50, 100, 200, "All"]],
         select:"single",
         "columns": [
@@ -192,7 +194,7 @@ $(document).ready(function() {
                 "data": null,
                 "defaultContent": '',
                 "render": function () {
-                    return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+                    return '<i class="fa fa-angle-double-down" aria-hidden="true"></i>';
                 },
                 width:"15px"
             },
@@ -203,7 +205,7 @@ $(document).ready(function() {
                 "targets": 2,
                 "data": 'department',
                 "render": function (data, type, row) {
-                    return '<a href="{{ path('org_department_view_noId') }}'+data.id + '">' + data.name + '</a>';
+                    return '<a href="{{ path('org_department_view_noId') }}'+data.id + '" style="color: black">' + data.name + '</a>';
                 }
             },
             { "data": "position" },
@@ -226,7 +228,10 @@ $(document).ready(function() {
                 "data": 'id',
                 "title": '',
                 "render": function (data, type, row) {
+                    return '<a href="{{ path('org_staff_view_noId') }}'+data + '"><i class="fa fa-user-edit" aria-hidden="true"></i></a>';
+                    {#
                     return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">View</a>';
+                    #}
                 }
             }
         ],
@@ -244,16 +249,16 @@ $(document).ready(function() {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
-            tdi.first().removeClass('fa-minus-square');
-            tdi.first().addClass('fa-plus-square');
+            tdi.first().removeClass('fa-angle-double-up');
+            tdi.first().addClass('fa-angle-double-down');
         }
         else {
             // Open this row
             row.child(format(row.data())).show();
             tr.addClass('shown');
             console.log(tdi);
-            tdi.first().removeClass('fa-plus-square');
-            tdi.first().addClass('fa-minus-square');
+            tdi.first().removeClass('fa-angle-double-down');
+            tdi.first().addClass('fa-angle-double-up');
         }
     });
 
@@ -293,6 +298,17 @@ $(document).ready(function() {
         .dataTables_length {
             float:left;
         }
+        .dataTables_info {
+            float:left;
+        }
+        .fbar {
+            padding-left: 5rem;
+            margin-top: .8rem;
+            float:right;
+        }
+        .dataTables_paginate.paging_simple_numbers {
+            float:right;
+        }
 
         .toolbar {
             padding-left: 1rem;
@@ -301,8 +317,10 @@ $(document).ready(function() {
         .toolbar>div>label {
             margin-top: .7rem;
         }
+        {#
         table.table a {
             color: black;
         }
+        #}
     </style>
 {% endblock %}

@@ -92,6 +92,13 @@ class Department
     private $active = false;
 
     /**
+     * @var StaffDepartment[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\StaffDepartment", mappedBy="department")
+     */
+    private $staffDepartments;
+
+    /**
      * @var Department[]|\Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\Department", mappedBy="parentDepartment")
@@ -245,9 +252,41 @@ class Department
     }
 
     /**
+     * @return StaffDepartment[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getStaffDepartments()
+    {
+        return $this->staffDepartments;
+    }
+
+    /**
+     * @param StaffDepartment[]|\Doctrine\Common\Collections\Collection $staffDepartments
+     */
+    public function setStaffDepartments($staffDepartments): void
+    {
+        $this->staffDepartments = $staffDepartments;
+    }
+
+    /**
+     * @param StaffDepartment $staff
+     */
+    public function addStaffDepartments(StaffDepartment $staff)
+    {
+        $this->staffDepartments->add($staff);
+    }
+
+    /**
+     * @param StaffDepartment $staff
+     */
+    public function removeStaffDepartments($staff)
+    {
+        $this->staffDepartments->removeElement($staff);
+    }
+
+    /**
      * @return Department[]|\Doctrine\Common\Collections\Collection
      */
-    public function getChildDepartments(): array
+    public function getChildDepartments()
     {
         return $this->childDepartments;
     }

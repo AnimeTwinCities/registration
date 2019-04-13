@@ -1,0 +1,177 @@
+{##
+ # Copyright (c) 2018. Anime Twin Cities, Inc.
+ #
+ # This project, including all of the files and their contents, is licensed under the terms of MIT License
+ #
+ # See the LICENSE file in the root of this project for details.
+#}
+{% extends 'detour.html.twig' %}
+
+{% block body %}
+<div class="container bg-white">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 class="page-header">
+                {{ department.name }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="unique-color text-white">External Email:</th>
+                        <td>
+                            {{ department.externalEmail |default('N/A') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="unique-color text-white">Internal Email:</th>
+                        <td>
+                            {{ department.internalEmail |default('N/A') }}
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="col-4">
+            <table class="table table-striped table-sm">
+                <thead>
+                {% if department.parentDepartment %}
+                    <tr>
+                        <th class="unique-color text-white">Reports to:</th>
+                        <td>
+                            <a href="{{ path('org_department_view', {'id': department.parentDepartment.id}) }}"
+                               style="color: black">
+                                {{ department.parentDepartment.name }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if department.childDepartments | length %}
+                    <tr>
+                        <th class="unique-color text-white align-top">Child Departments:</th>
+                        <td>
+                            {% for childDepartment in department.childDepartments %}
+                                {% if loop.index != 1 %}<br>{% endif %}
+                                <a href="{{ path('org_department_view', {'id': childDepartment.id}) }}" style="color: black">
+                                    {{ childDepartment.name }}
+                                </a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('org_staff_view', {'id': member.staff.id}) }}"
+                               style="color: black">
+                            {{ member.staff.firstName }}
+                            {% if member.staff.nickName %} "{{ member.staff.nickName }}" {% endif %}
+                            {{ member.staff.lastName }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if member.isHead %}
+                                <i class="fa fa-crown" aria-hidden="true"></i> Head
+                                {% if member.temporary and member.isHead %} (Acting) {% endif %}
+                            {% elseif member.isSubHead %}
+                                <i class="fa fa-award" aria-hidden="true"></i> Sub-Head
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ member.position }}
+                        </td>
+                        <td>
+                            {{ member.staff.officialEmail ?: member.staff.personalEmail }}
+                        </td>
+                        <td>
+                            {{ member.staff.phoneNumber }}
+                        </td>
+                        <td>
+                            {{ member.staff.activeRegistration
+                                ? '<i class="fa fa-check-circle" aria-hidden="true"></i> Yes'
+                                : '<i class="fa fa-minus-circle" aria-hidden="true"></i> No'
+                            }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 registration-info">
+        </div>
+
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>History</h3>
+            <table class="table table-striped table-sm history-table">
+                <thead class="unique-color text-white">
+                <tr>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#
+                {% for historyInstance in history %}
+                    <tr class="info">
+                        <td>{{ historyInstance.createdBy.firstName }} {{ historyInstance.createdBy.lastName }}</td>
+                        <td>{{ historyInstance.createdDate|date('M d, Y g:i a') }}</td>
+                        <td>{{ historyInstance.changeText|raw }}</td>
+                    </tr>
+                {% endfor %}
+                {% if history is empty %}
+                    <tr class="warning">
+                        <td colspan="3">
+                            There is no history available for this user yet.
+                        </td>
+                    </tr>
+                {% endif %}
+                #}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    .fa-check-circle {
+        color: forestgreen;
+    }
+    .fa-minus-circle {
+        color: red;
+    }
+</style>
+{% endblock %}

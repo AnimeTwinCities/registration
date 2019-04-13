@@ -102,6 +102,11 @@ class MenuController extends Controller
                             'access' => 'ROLE_ADMIN',
                         ],
                         [
+                            'title' => 'Staff',
+                            'url' => 'staff_list',
+                            'access' => 'ROLE_ADMIN',
+                        ],
+                        [
                             'title' => 'Admin',
                             'url' => 'admin',
                             'access' => 'ROLE_ADMIN',
