@@ -10,7 +10,7 @@
 declare(strict_types=1);
 
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Organization;
 
 use AppBundle\Entity\Organization\Department;
 use AppBundle\Entity\Organization\Staff;
