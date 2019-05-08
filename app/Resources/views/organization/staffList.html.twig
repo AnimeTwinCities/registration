@@ -155,7 +155,8 @@ $(document).ready(function() {
                         '<label class="custom-control-label" for="showInactiveStaff">Show inactive staff</label>'+
                     '</div>');
             $("div.fbar")
-                .html('<a href="" class="btn unique-color btn-sm text-white"><b>Add Staff</b></a>');
+                .html('<a href="{{ path('org_staff_edit_new') }}" ' +
+                    'class="btn unique-color btn-sm text-white"><b>Add Staff</b></a>');
             $('#showInactiveStaff').change(function() {
                 if(this.checked) {
                     table.ajax.url( '{{ path('ajax_staff_list') }}?showInactive=true' ).load();
@@ -247,7 +248,7 @@ $(document).ready(function() {
                 "data": 'id',
                 "title": '',
                 "render": function (data, type, row) {
-                    return '<a href="{{ path('org_staff_view_noId') }}'+data + '"><i class="fa fa-user-edit" aria-hidden="true"></i></a>';
+                    return '<a href="{{ path('org_staff_edit_new') }}'+data + '"><i class="fa fa-user-edit" aria-hidden="true"></i></a>';
                     {#
                     return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">View</a>';
                     #}
