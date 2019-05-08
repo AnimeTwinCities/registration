@@ -12,16 +12,14 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller\Organization;
 
-use AppBundle\Entity\Organization\Department;
 use AppBundle\Entity\Organization\Staff;
-use AppBundle\Entity\Organization\StaffDepartment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StaffListController extends Controller
+class ListController extends Controller
 {
     /**
      * @Route("/staff", name="staff_list")
@@ -102,68 +100,5 @@ class StaffListController extends Controller
         }
 
         return $this->json($returnArray);
-    }
-
-    /**
-     * @Route("/org/department/view/", name="org_department_view_noId")
-     * @Route("/org/department/view/{id}", name="org_department_view")
-     * @Security("has_role('ROLE_USER')")
-     *
-     * @param string $id
-     * @return Response
-     */
-    public function viewDepartment($id)
-    {
-        $department = $this->getDoctrine()
-            ->getRepository(Department::class)
-            ->find($id);
-
-        if (!$department) {
-            $this->createNotFoundException('Invalid Department');
-        }
-
-        $staffDepartments = $department->getStaffDepartments();
-        $head = null;
-        $subHeads = [];
-        $others = [];
-        foreach ($staffDepartments as $staffDepartment) {
-            /** @var StaffDepartment $staffDepartment */
-            if ($staffDepartment->isHead()) {
-                $head = $staffDepartment;
-            } elseif ($staffDepartment->isSubHead()) {
-                $subHeads[] = $staffDepartment;
-            } else {
-                $others[] = $staffDepartment;
-            }
-        }
-
-        $members = [];
-        if ($head) {
-            $members[] = $head;
-        }
-        $members = array_merge($members, $subHeads, $others);
-
-        $childDepartments = $department->getChildDepartments();
-
-        $parameters = [
-            'department' => $department,
-            'childDepartments' => $childDepartments,
-            'members' => $members,
-        ];
-
-        return $this->render('organization/department.html.twig', $parameters);
-    }
-
-    /**
-     * @Route("/org/staff/view/", name="org_staff_view_noId")
-     * @Route("/org/staff/view/{id}", name="org_staff_view")
-     * @Security("has_role('ROLE_USER')")
-     *
-     * @param string $id
-     * @return Response
-     */
-    public function viewStaff($id)
-    {
-        return $this->json(['staff']);
     }
 }

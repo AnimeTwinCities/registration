@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StaffEditController extends Controller
+class StaffController extends Controller
 {
     /**
      * @Route("/org/staff/edit/", name="org_staff_edit_new")
@@ -29,5 +29,18 @@ class StaffEditController extends Controller
     public function editStaff($id = '')
     {
         return $this->json([$id]);
+    }
+
+    /**
+     * @Route("/org/staff/view/", name="org_staff_view_noId")
+     * @Route("/org/staff/view/{id}", name="org_staff_view")
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param string $id
+     * @return Response
+     */
+    public function viewStaff($id)
+    {
+        return $this->json(['staff']);
     }
 }
