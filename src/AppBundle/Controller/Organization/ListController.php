@@ -76,6 +76,7 @@ class ListController extends Controller
 
             $returnArray['data'][] = [
                 'id' => $staff->getId(),
+                'name' => $staff->getName(),
                 'first_name' => $staff->getFirstName(),
                 'last_name' => $staff->getLastName(),
                 'nickname' => $staff->getNickName(),
@@ -92,7 +93,7 @@ class ListController extends Controller
                 'personal_email' => $staff->getPersonalEmail(),
                 'phone' => $staff->getPhoneNumber(),
                 'dob' => $staff->getDateOfBirth()->format('F j Y'),
-                'shirt' => "{$staff->getShirtType()} {$staff->getShirtSize()}",
+                'shirt' => $staff->getShirt(),
                 'other_departments' => implode(', ', $otherDepartments),
                 'is_registered' => $staff->getActiveRegistration() ? true : false,
                 'is_active' => $staff->isActive() ? true : false,

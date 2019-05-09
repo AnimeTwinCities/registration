@@ -192,6 +192,13 @@ class Staff
         return $this->id;
     }
 
+    public function getName(): string
+    {
+        $nickname = $this->getNickName() ? "\"{$this->getNickName()}\" ": '';
+
+        return "{$this->getFirstName()} $nickname{$this->getLastName()}";
+    }
+
     /**
      * @return string
      */
@@ -318,6 +325,15 @@ class Staff
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    public function getShirt(): ?string
+    {
+        if (!$this->getShirtSize()) {
+            return null;
+        }
+
+        return "{$this->getShirtType()} {$this->getShirtSize()}";
     }
 
     /**

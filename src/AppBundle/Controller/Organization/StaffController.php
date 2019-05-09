@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller\Organization;
 
+use AppBundle\Entity\Organization\Staff;
+use AppBundle\Entity\Organization\StaffDepartment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +43,35 @@ class StaffController extends Controller
      */
     public function viewStaff($id)
     {
-        return $this->json(['staff']);
+        $parameters = [];
+
+        $staff = $this->getDoctrine()->getRepository(Staff::class)->find($id);
+
+        if (!$staff) {
+            $this->createNotFoundException('Invalid Staff Member');
+        }
+
+        $parameters['staff'] = $staff;
+
+        /** @var StaffDepartment[] $departments */
+        $departments = $staff->getDepartments();
+        $primaryDepartment = null;
+        $otherDepartments = [];
+        foreach ($departments as $department) {
+            if ($department->isPrimary()) {
+                $primaryDepartment = $department;
+            } else {
+                $departmentName = $department->getDepartment()->getName();
+                if ($department->getPosition()) {
+                    $departmentName .= " ({$department->getPosition()})";
+                }
+                $otherDepartments[] = $departmentName;
+            }
+        }
+
+        /** @var StaffDepartment[] $parameters['departments'] */
+        $parameters['departments'] = array_merge([$primaryDepartment], $otherDepartments);
+
+        return $this->render('organization/staffView.html.twig', $parameters);
     }
 }
