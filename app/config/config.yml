@@ -62,6 +62,11 @@ doctrine:
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #path: '%database_path%'
+        types:
+            uuid:  Ramsey\Uuid\Doctrine\UuidType
+            uuid_binary_ordered_time: Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType
+        mapping_types:
+            uuid_binary_ordered_time: binary
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
