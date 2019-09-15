@@ -30,7 +30,36 @@ class StaffController extends Controller
      */
     public function editStaff($id = '')
     {
-        return $this->json([$id]);
+        $parameters = [];
+
+        $staff = $this->getDoctrine()->getRepository(Staff::class)->find($id);
+
+        if (!$staff) {
+            $this->createNotFoundException('Invalid Staff Member');
+        }
+
+        $parameters['staff'] = $staff;
+
+        /** @var StaffDepartment[] $departments */
+        $departments = $staff->getDepartments();
+        $primaryDepartment = null;
+        $otherDepartments = [];
+        foreach ($departments as $department) {
+            if ($department->isPrimary()) {
+                $primaryDepartment = $department;
+            } else {
+                $departmentName = $department->getDepartment()->getName();
+                if ($department->getPosition()) {
+                    $departmentName .= " ({$department->getPosition()})";
+                }
+                $otherDepartments[] = $departmentName;
+            }
+        }
+
+        /** @var StaffDepartment[] $parameters['departments'] */
+        $parameters['departments'] = array_merge([$primaryDepartment], $otherDepartments);
+
+        return $this->render('organization/staffEdit.html.twig', $parameters);
     }
 
     /**
