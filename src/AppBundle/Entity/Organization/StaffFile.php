@@ -13,6 +13,8 @@ namespace AppBundle\Entity\Organization;
 
 
 use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Mapping as ORM;
+use \AppBundle\Entity\User;
 
 /**
  * Badge
@@ -152,17 +154,17 @@ class StaffFile
     }
 
     /**
-     * @return Staff
+     * @return User
      */
-    public function getCreatedBy(): Staff
+    public function getCreatedBy(): User
     {
         return $this->createdBy;
     }
 
     /**
-     * @param Staff $createdBy
+     * @param User $createdBy
      */
-    public function setCreatedBy(Staff $createdBy): void
+    public function setCreatedBy(User $createdBy): void
     {
         $this->createdBy = $createdBy;
     }
@@ -200,17 +202,17 @@ class StaffFile
     }
 
     /**
-     * @return Staff
+     * @return User
      */
-    public function getModifiedBy(): Staff
+    public function getModifiedBy(): User
     {
         return $this->modifiedBy;
     }
 
     /**
-     * @param Staff $modifiedBy
+     * @param User $modifiedBy
      */
-    public function setModifiedBy(Staff $modifiedBy): void
+    public function setModifiedBy(User $modifiedBy): void
     {
         $this->modifiedBy = $modifiedBy;
     }

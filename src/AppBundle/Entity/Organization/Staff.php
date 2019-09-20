@@ -31,11 +31,12 @@ use \AppBundle\Entity\User;
 class Staff
 {
     /**
-     * @var integer
+     * @var \Ramsey\Uuid\UuidInterface
      *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
 
