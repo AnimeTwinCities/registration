@@ -780,10 +780,10 @@ from2@^2.1.0:
     readable-stream "^2.0.0"
 
 fs-minipass@^1.2.5:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.6.tgz#2c5cc30ded81282bfe8a0d7c7c1853ddeb102c07"
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.7.tgz#ccff8570841e7fe4265693da88936c55aed7f7c7"
   dependencies:
-    minipass "^2.2.1"
+    minipass "^2.6.0"
 
 fs-vacuum@^1.2.10, fs-vacuum@~1.2.10:
   version "1.2.10"
@@ -1407,8 +1407,8 @@ make-fetch-happen@^3.0.0:
     ssri "^5.2.4"
 
 mdbootstrap@^4.5.0:
-  version "4.8.9"
-  resolved "https://registry.yarnpkg.com/mdbootstrap/-/mdbootstrap-4.8.9.tgz#f614fb687f0c3765ade905d9d088102f3497b3f5"
+  version "4.8.10"
+  resolved "https://registry.yarnpkg.com/mdbootstrap/-/mdbootstrap-4.8.10.tgz#2a8e94fd1d9390c1d47d215a208ba52829744816"
   dependencies:
     "@babel/core" "^7.3.3"
 
@@ -1450,9 +1450,9 @@ minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
-minipass@^2.2.1, minipass@^2.3.3, minipass@^2.3.5:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/minipass/-/minipass-2.5.1.tgz#cf435a9bf9408796ca3a3525a8b851464279c9b8"
+minipass@^2.2.1, minipass@^2.3.3, minipass@^2.3.5, minipass@^2.6.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-2.6.2.tgz#c3075a22680b3b1479bae5915904cb1eba50f5c0"
   dependencies:
     safe-buffer "^5.1.2"
     yallist "^3.0.0"
