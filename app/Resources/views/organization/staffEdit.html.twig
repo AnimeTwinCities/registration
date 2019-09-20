@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h2 class="page-header">
-                    {{ staff.name }}
+                    {{ staff.name | default("Add New Staff") }}
                 </h2>
             </div>
         </div>
@@ -20,6 +20,48 @@
         <div class="row">
             <div class="col-8">
                 <div class="row">
+                    <div class="col-4">
+                        <div class="md-form">
+                            <input type="text"
+                                   id="officialEmail"
+                                   name="officialEmail"
+                                   class="form-control validate"
+                                   value="{{ staff.firstName|default('') }}"
+                                   required>
+                            <label for="officialEmail">
+                                First Name
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="md-form">
+                            <input type="text"
+                                   id="personalEmail"
+                                   name="personalEmail"
+                                   class="form-control validate"
+                                   value="{{ staff.nickName|default('') }}"
+                                   required>
+                            <label for="personalEmail">
+                                Nickname
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="md-form">
+                            <input type="text"
+                                   id="personalEmail"
+                                   name="personalEmail"
+                                   class="form-control validate"
+                                   value="{{ staff.lastName|default('') }}"
+                                   required>
+                            <label for="personalEmail">
+                                Last Name
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="col-6">
                         <div class="md-form">
                             <input type="text"
@@ -122,6 +164,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                        <div class="col-sm-8">
+                        </div>
+                        <div class="col-sm-2">
+                            <button id="addAnother" type="button" class="btn btn-light">
+                                Cancel
+                            </button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button id="save_form" type="button" class="btn btn-warning">Save</button>
+                        </div>
+                </div>
             </div>
             <div class="col-4">
                 <table class="table table-striped table-sm">
@@ -131,7 +185,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for staffDepartment in staff.departments %}
+                    {% for staffDepartment in departments %}
                         <tr>
                             <td>
                                 <a href="{{ path('org_department_view', {'id': staffDepartment.department.id}) }}"
@@ -162,7 +216,7 @@
                     <tr>
                         <th class="unique-color text-white">Registered:</th>
                         <td>
-                            {% if staff.activeRegistration %}
+                            {% if staff is not null and staff.activeRegistration %}
                                 <i class="fa fa-check-circle" aria-hidden="true"></i> Yes
                             {% else %}
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i> No
@@ -172,7 +226,7 @@
                     <tr>
                         <th class="unique-color text-white">Active:</th>
                         <td>
-                            {% if staff.active %}
+                            {% if staff is not null and staff.active %}
                                 <i class="fa fa-check-circle" aria-hidden="true"></i> Yes
                             {% else %}
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i> No
@@ -182,8 +236,8 @@
                     <tr>
                         <th class="unique-color text-white">Intake Form Completed:</th>
                         <td>
-                            {% if staff.completedIntake %}
-                                {{ staff.intakeFormFile }}
+                            {% if staff is not null and staff.completedIntake %}
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> Yes
                             {% else %}
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i> No
                             {% endif %}
@@ -205,6 +259,7 @@
             </div>
         </div>
 
+        {% if staff is not null %}
         <div class="row">
             <div class="col-sm-12">
                 <h3>History</h3>
@@ -237,6 +292,7 @@
                 </table>
             </div>
         </div>
+        {% endif %}
     </div>
     <style>
         .fa-check-circle {

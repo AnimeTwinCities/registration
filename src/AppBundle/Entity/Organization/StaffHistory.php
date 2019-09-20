@@ -42,7 +42,7 @@ class StaffHistory
     /**
      * @var Staff
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff" inversedBy="history")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff", inversedBy="history")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
      * })
