@@ -14,6 +14,7 @@ namespace AppBundle\Entity\Organization;
 
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Badge
@@ -41,7 +42,7 @@ class StaffHistory
     /**
      * @var Staff
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff" inversedBy="history")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
      * })
@@ -90,9 +91,9 @@ class StaffHistory
     private $modifiedBy;
 
     /**
-     * @return int
+     * @return UuidInterface
      */
-    public function getId(): int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

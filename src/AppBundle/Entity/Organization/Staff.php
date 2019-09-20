@@ -16,6 +16,7 @@ use AppBundle\Entity\Registration;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Badge
@@ -202,9 +203,9 @@ class Staff
     }
 
     /**
-     * @return int
+     * @return UuidInterface
      */
-    public function getId(): int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

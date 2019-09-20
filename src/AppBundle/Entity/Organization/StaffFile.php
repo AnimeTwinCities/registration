@@ -56,7 +56,7 @@ class StaffFile
     /**
      * @var Staff
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff" inversedBy="files")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="staff_id", referencedColumnName="id")
      * })
@@ -64,7 +64,7 @@ class StaffFile
     private $staff;
 
     /**
-     * @var Staff
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
      * @ORM\JoinColumns({
@@ -88,7 +88,7 @@ class StaffFile
     private $modifiedDate;
 
     /**
-     * @var Staff
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organization\Staff")
      * @ORM\JoinColumns({

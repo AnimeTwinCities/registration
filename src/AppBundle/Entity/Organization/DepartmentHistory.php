@@ -14,6 +14,7 @@ namespace AppBundle\Entity\Organization;
 
 use Doctrine\ORM\Mapping as ORM;
 use \AppBundle\Entity\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Badge
@@ -90,9 +91,9 @@ class DepartmentHistory
     private $modifiedBy;
 
     /**
-     * @return int
+     * @return UuidInterface
      */
-    public function getId(): int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
