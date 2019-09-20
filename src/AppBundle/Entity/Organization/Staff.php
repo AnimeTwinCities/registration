@@ -145,6 +145,20 @@ class Staff
     private $departments;
 
     /**
+     * @var StaffFile[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="StaffFile", mappedBy="staff")
+     */
+    private $files;
+
+    /**
+     * @var StaffHistory[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\StaffHistory", mappedBy="staff")
+     */
+    private $history;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
@@ -182,6 +196,8 @@ class Staff
     {
         $this->departments = new ArrayCollection();
         $this->registrations = new ArrayCollection();
+        $this->history = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     /**
@@ -401,22 +417,6 @@ class Staff
     }
 
     /**
-     * @return string
-     */
-    public function getIntakeFormFile(): ?string
-    {
-        return $this->intakeFormFile;
-    }
-
-    /**
-     * @param string $intakeFormFile
-     */
-    public function setIntakeFormFile(?string $intakeFormFile): void
-    {
-        $this->intakeFormFile = $intakeFormFile;
-    }
-
-    /**
      * @return Registration[]
      */
     public function getRegistrations()
@@ -492,6 +492,54 @@ class Staff
     public function removeDepartment(StaffDepartment $staffDepartment)
     {
         $this->departments->removeElement($staffDepartment);
+    }
+
+    /**
+     * @return StaffFile[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * @param StaffFile[]|\Doctrine\Common\Collections\Collection $files
+     */
+    public function setFiles($files): void
+    {
+        $this->files = $files;
+    }
+
+    /**
+     * @param StaffFile $file
+     */
+    public function addFile(StaffFile $file)
+    {
+        $this->history->add($file);
+    }
+
+    /**
+     * @return StaffHistory[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
+     * @param StaffHistory[]|\Doctrine\Common\Collections\Collection $history
+     */
+    public function setHistory($history): void
+    {
+        $this->history = $history;
+    }
+
+    /**
+     * @param StaffHistory $history
+     */
+    public function addHistory(StaffHistory $history)
+    {
+        $this->history->add($history);
     }
 
     /**

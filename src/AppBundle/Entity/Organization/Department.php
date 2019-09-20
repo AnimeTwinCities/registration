@@ -33,6 +33,7 @@ class Department
     public function __construct()
     {
         $this->childDepartments = new ArrayCollection();
+        $this->history = new ArrayCollection();
     }
 
     public function __toString()
@@ -112,6 +113,13 @@ class Department
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parentDepartment;
+
+    /**
+     * @var DepartmentHistory[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\DepartmentHistory", mappedBy="department")
+     */
+    private $history;
 
     /**
      * @var User
@@ -329,6 +337,30 @@ class Department
     public function setParentDepartment(Department $parentDepartment): void
     {
         $this->parentDepartment = $parentDepartment;
+    }
+
+    /**
+     * @return DepartmentHistory[]|\Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    /**
+     * @param DepartmentHistory[]|\Doctrine\Common\Collections\Collection $history
+     */
+    public function setHistory($history): void
+    {
+        $this->history = $history;
+    }
+
+    /**
+     * @param DepartmentHistory $history
+     */
+    public function addHistory(DepartmentHistory $history)
+    {
+        $this->history->add($history);
     }
 
     /**
