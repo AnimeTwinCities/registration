@@ -11,12 +11,15 @@ You must have installed the following:
     * Other Database engines may work, however this is untested
     * Make sure you have created an empty database for the project
     * Also make sure you have a user/password create with permissions for that database
+    * When installing Mysql be sure to choose the Legacy Authentication Method
 * Apache (nginx is untested, it may work or require additional configuration)
 * PHP 7.1+
 * yarn 
     * https://yarnpkg.com/lang/en/docs/install/
 * composer 
     * https://getcomposer.org/doc/00-intro.md
+* NodeJS
+    * https://nodejs.org/en/download/
 * Configure php, git, yarn and composer to be in your $PATH for command line
 
 Development Install
@@ -29,12 +32,15 @@ Development Install
          * `cd registration`
          * If you provided a `[<directory name>]`, use that in place of registration
 2. Install package dependencies
-     1. Start composer install
+     1. Update php.ini file (it should be in the directory php was installed to)
+         * Uncomment ';extension=gd2'
+         * Uncomment ';extension=pdo_mysql'
+     2. Start composer install
          * `composer install`
          * You will  be asked questions during the install
          * for example, make sure you have your database information ready
          * For your mail information you could just provide your gmail setting
-     2. Start yarn install
+     3. Start yarn install
          * `cd web`
          * `yarn install`
          * return to the root directory
@@ -43,7 +49,7 @@ Development Install
      1. Use Doctrine to generate all tables
          * `php bin/console doctrine:schema:update --force`
      2. Create your first user (change user/email/password)
-         * `php app/console fos:user:create testuser test@example.com p@ssword --super-admin`
+         * `php bin/console fos:user:create testuser test@example.com p@ssword --super-admin`
 4. Insert Seed data for registration badges
      1. Run the sql file located at: app/config/seedData.sql
 
