@@ -126,13 +126,6 @@ class Staff
     private $completedIntake = false;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="intake_form_file", type="string", length=255, nullable=true)
-     */
-    private $intakeFormFile;
-
-    /**
      * @var Registration[]|\Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Registration", mappedBy="staffMember")
@@ -150,6 +143,7 @@ class Staff
      * @var StaffFile[]|\Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="StaffFile", mappedBy="staff")
+     * @ORM\OrderBy({"createdDate" = "DESC"})
      */
     private $files;
 
@@ -157,6 +151,7 @@ class Staff
      * @var StaffHistory[]|\Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Organization\StaffHistory", mappedBy="staff")
+     * @ORM\OrderBy({"createdDate" = "DESC"})
      */
     private $history;
 
@@ -205,7 +200,7 @@ class Staff
     /**
      * @return UuidInterface
      */
-    public function getId(): UuidInterface
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -220,7 +215,7 @@ class Staff
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -236,7 +231,7 @@ class Staff
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -284,7 +279,7 @@ class Staff
     /**
      * @return \DateTime
      */
-    public function getDateOfBirth(): \DateTime
+    public function getDateOfBirth(): ?\DateTime
     {
         return $this->dateOfBirth;
     }
@@ -408,6 +403,22 @@ class Staff
     public function isCompletedIntake(): bool
     {
         return $this->completedIntake;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCheckedIntake(): string
+    {
+        return $this->completedIntake ? 'checked' : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCheckedActive(): string
+    {
+        return $this->active ? 'checked' : '';
     }
 
     /**

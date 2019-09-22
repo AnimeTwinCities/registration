@@ -243,7 +243,7 @@ $(document).ready(function() {
                 "data": 'id',
                 "title": '',
                 "render": function (data, type, row) {
-                    return '<a href="{{ path('org_staff_edit_new') }}'+data + '"><i class="fa fa-user-edit" aria-hidden="true"></i></a>';
+                    return '<a href="{{ path('org_staff_edit_new') }}?id='+data + '"><i class="fa fa-user-edit" aria-hidden="true"></i></a>';
                     {#
                     return '<a href="{{ path('org_staff_view_noId') }}'+data + '" class="btn btn-primary btn-sm">View</a>';
                     #}

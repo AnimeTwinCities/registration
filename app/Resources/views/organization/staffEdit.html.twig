@@ -8,6 +8,9 @@
 {% extends 'detour.html.twig' %}
 
 {% block body %}
+<form action="javascript:void(0);" id="form_editStaff">
+    <input type="hidden" id="staff_id" name="staff_id" value="{{ staff.id|default('') }}">
+
     <div class="container bg-white">
         <div class="row">
             <div class="col-sm-12">
@@ -23,12 +26,12 @@
                     <div class="col-4">
                         <div class="md-form">
                             <input type="text"
-                                   id="officialEmail"
-                                   name="officialEmail"
+                                   id="firstName"
+                                   name="firstName"
                                    class="form-control validate"
                                    value="{{ staff.firstName|default('') }}"
                                    required>
-                            <label for="officialEmail">
+                            <label for="firstName">
                                 First Name
                             </label>
                         </div>
@@ -37,12 +40,12 @@
                     <div class="col-4">
                         <div class="md-form">
                             <input type="text"
-                                   id="personalEmail"
-                                   name="personalEmail"
+                                   id="nickName"
+                                   name="nickName"
                                    class="form-control validate"
                                    value="{{ staff.nickName|default('') }}"
                                    required>
-                            <label for="personalEmail">
+                            <label for="nickName">
                                 Nickname
                             </label>
                         </div>
@@ -51,17 +54,18 @@
                     <div class="col-4">
                         <div class="md-form">
                             <input type="text"
-                                   id="personalEmail"
-                                   name="personalEmail"
+                                   id="lastName"
+                                   name="lastName"
                                    class="form-control validate"
                                    value="{{ staff.lastName|default('') }}"
                                    required>
-                            <label for="personalEmail">
+                            <label for="lastName">
                                 Last Name
                             </label>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="col-6">
                         <div class="md-form">
                             <input type="text"
@@ -89,12 +93,13 @@
                             </label>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="col-6">
                         <div class="md-form">
                             <input type="text"
-                                   id="phone"
-                                   name="phone"
+                                   id="phoneNumber"
+                                   name="phoneNumber"
                                    class="form-control validate"
                                    value="{{ staff.phoneNumber|default('') }}"
                                    required>
@@ -133,7 +138,8 @@
                             </label>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="col-6">
                         <div class="md-form">
                             <label for="shirtType" style="top:-2rem">Shirt Type</label>
@@ -164,17 +170,56 @@
                         </div>
                     </div>
                 </div>
+                <div class="row" id="alert_div" style="display: none">
+                    <div class="col-sm-12">
+                        <h4 id="alert_heading">Info</h4>
+                        <div class="alert" id="alert_subdiv"role="alert">
+                            <p id="alert_msg">Unknown Error.</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
-                        <div class="col-sm-8">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="comments">Comments</label>
+                            <textarea class="form-control rounded-0" name="comments" id="comments" rows="6"></textarea>
                         </div>
-                        <div class="col-sm-2">
-                            <button id="addAnother" type="button" class="btn btn-light">
-                                Cancel
-                            </button>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <br>
                         </div>
-                        <div class="col-sm-2">
-                            <button id="save_form" type="button" class="btn btn-warning">Save</button>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" name="isActiveStaff" class="custom-control-input"
+                                           id="isActiveStaff" {{ staff.checkedActive }}>
+                                    <label class="custom-control-label" for="isActiveStaff">Active Staff</label>
+                                </div>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" name="hasCompletedIntake" class="custom-control-input"
+                                           id="hasCompletedIntake" {{ staff.checkedIntake }}>
+                                    <label class="custom-control-label" for="hasCompletedIntake">Has Completed Intake</label>
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <br>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button id="addAnother" type="button" class="btn btn-light">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button id="save_form" type="button" class="btn btn-warning">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-4">
@@ -182,6 +227,12 @@
                     <thead>
                     <tr>
                         <th class="unique-color text-white" colspan="3">Departments:</th>
+                        <th class="unique-color text-white text-right">
+                            <button id="add_department" type="button" class="btn btn-sm btn-info"
+                                style="padding: 0 1rem; margin: 0;">
+                                Add
+                            </button>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -204,6 +255,12 @@
                             <td>
                                 {{ staffDepartment.position }}
                             </td>
+                            <td class="text-right">
+                                <button id="add_department" type="button" class="btn btn-sm btn-danger"
+                                        style="padding: 0 1rem; margin: 0;">
+                                    Remove
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -223,6 +280,7 @@
                             {% endif %}
                         </td>
                     </tr>
+                    {#
                     <tr>
                         <th class="unique-color text-white">Active:</th>
                         <td>
@@ -243,19 +301,9 @@
                             {% endif %}
                         </td>
                     </tr>
+                    #}
                     </thead>
                 </table>
-
-                <br>
-
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitches">
-                    <label class="custom-control-label" for="customSwitches">Active Staff</label>
-                </div>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitches">
-                    <label class="custom-control-label" for="customSwitches">Has Intake Form</label>
-                </div>
             </div>
         </div>
 
@@ -272,35 +320,86 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {#
-                    {% for historyInstance in history %}
+                    {% for history in staffHistory %}
                         <tr class="info">
-                            <td>{{ historyInstance.createdBy.firstName }} {{ historyInstance.createdBy.lastName }}</td>
-                            <td>{{ historyInstance.createdDate|date('M d, Y g:i a') }}</td>
-                            <td>{{ historyInstance.changeText|raw }}</td>
+                            <td>{{ history.createdBy.firstName }} {{ history.createdBy.lastName }}</td>
+                            <td>{{ history.createdDate|date('M d, Y g:i a') }}</td>
+                            <td>{{ history.changeText|raw }}</td>
                         </tr>
                     {% endfor %}
-                    {% if history is empty %}
+                    {% if staffHistory is empty %}
                         <tr class="warning">
                             <td colspan="3">
                                 There is no history available for this user yet.
                             </td>
                         </tr>
                     {% endif %}
-                    #}
                     </tbody>
                 </table>
             </div>
         </div>
         {% endif %}
     </div>
+</form>
     <style>
-        .fa-check-circle {
-            color: forestgreen;
-        }
+    .fa-check-circle {
+        color: forestgreen;
+    }
 
-        .fa-minus-circle {
-            color: red;
-        }
-    </style>
+    .fa-minus-circle {
+        color: red;
+    }
+</style>
+<script>
+    $('#save_form').click(function ()
+    {
+        console.log('bi');
+        var is_update = {{ (staff is not null) ? 'true' : 'false' }};
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ path('org_staff_edit') }}',
+            dataType: 'json',
+            data: $('#form_editStaff').serialize(),
+            error: function (x, textStatus)
+            {
+                var error;
+                if (textStatus === 'parsererror') {
+                    error = 'Invalid JSON returned. Please retry.';
+                } else {
+                    if (textStatus === 'timeout') {
+                        error = 'Timeout Error: Could not communicate with server. Check connection';
+                    } else {
+                        error = textStatus + ': Please try again.';
+                    }
+                }
+                var alert_subdiv = $('#alert_subdiv');
+                $('#alert_div').show();
+                $('#alert_msg').text(error);
+                $('#alert_heading').text('Info');
+                alert_subdiv.addClass('bs-callout-danger');
+                alert_subdiv.removeClass('bs-callout-info');
+            }
+        })
+        .done(function (data)
+        {
+            var alert_subdiv = $('#alert_subdiv');
+            $('#alert_div').show();
+            $('#alert_msg').html("<b>" + data['message'] + "</b>");
+            if (data['success']) {
+                if ($('#staff_id').val() === '' && data['staff_id'] !== '') {
+                    window.location('{{ path('org_staff_edit_new') }}?id=' + data['staff_id']);
+                }
+
+                $('#alert_heading').text('Info');
+                alert_subdiv.removeClass('alert-danger');
+                alert_subdiv.addClass('alert-primary');
+            } else {
+                $('#alert_heading').text('Error');
+                alert_subdiv.addClass('alert-danger');
+                alert_subdiv.removeClass('alert-primary');
+            }
+        });
+    });
+</script>
 {% endblock %}
