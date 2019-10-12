@@ -238,9 +238,9 @@ class ASecureCartController extends Controller
           <ordered_by name="John Koniges" company="" address="123 Main St." address2="" city="Minnesota City" state="MN" province="" zip="55122" country="United States" phone="612-555-1122" extension="" fax="" email="john.koniges@animedetour.com" />
           <deliver_to name="John Koniges" company="" address="123 Main St." address2="" city="Minnesota City" state="MN" province="" zip="55122" country="United States" residential="" phone="612-555-1122" extension="" />
           <cart_items>
-             <cart_item id="JJKTEST" describe="This is a test of the posting." onetime="0" color="" size="3XL" addon1="addon1" addon2=""
+             <cart_item id="ADREGSTANDARD" describe="This is a test of the posting." onetime="0" color="" size="3XL" addon1="John|J|Koniges" addon2=""
              addon3="addon2" addon4="" addon5="" addon6="" addon7="" addon8="" naddon1="" naddon2=""
-             haddon1="John|J|Koniges, 123 Main St.||Minnesota City|MN|55122|john.koniges@animedetour.com|6125551122" haddon2="JohnK" haddon3=""
+             haddon1="John|J|Koniges, 123 Main St.||Minnesota City|MN|55122|john.koniges@animedetour.com|6125551122" haddon2="JohnK" haddon3="Minnesota City|MN|55122"
              haddon4="08/19/1983" haddon5="1" haddon6="1" haddon7="" haddon8="" sku="REG=3XL|" eventstart="05/01/2014 00:00:00 AM"
              eventend="05/31/2014 00:00:00 AM" qty="1" unit_price="1.00" item_total="1.00"
              />
