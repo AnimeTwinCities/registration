@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2018. Anime Twin Cities, Inc.
+ * Copyright (c) 2019. Anime Twin Cities, Inc.
  *
  * This project, including all of the files and their contents, is licensed under the terms of MIT License
  *
@@ -136,7 +136,6 @@ class ASecureCartController extends Controller
                 // Addon5
                 // Addon6 Mens/Womens Shirt
                 // size   Shirt Size
-                // Addon9 SponsorBreakfast Extra 'SponsorBreakfast' or 'Decline' or '' if not a sponsor type
 
                 // hAddon1 Address 1
                 // hAddon2 Adrress 2
@@ -214,12 +213,6 @@ class ASecureCartController extends Controller
                             . (String)$attributes['addon6'] . ' ' . (String)$attributes['size'];
                         $this->createRegistrationError($error, $xmlPost);
                     }
-                }
-
-                $breakfastOption = (String)$attributes['addon5'];
-                if (strpos($breakfastOption, 'SponsorBreakfast') !== false) {
-                    $extra = $entityManager->getRepository(Extra::class)->getExtraFromName('SponsorBreakfast');
-                    $registration->addExtra($extra);
                 }
 
                 $entityManager->flush();
