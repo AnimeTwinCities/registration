@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2018. Anime Twin Cities, Inc.
+ * Copyright (c) 2019. Anime Twin Cities, Inc.
  *
  * This project, including all of the files and their contents, is licensed under the terms of MIT License
  *
@@ -58,8 +58,6 @@ class RegistrationFormController extends Controller
         $pdf->cell('15');
         $pdf->Cell(170, 16, 'Sponsor ($150)');
         $pdf->CheckBox('reg_sponsor', 16);
-        $pdf->cell('40');
-        $pdf->Cell(160, 16, 'Sponsor Only Breakfast');
         $pdf->Ln(16);
 
         $pdf->Cell(155, 16, 'Minor ($40) Age 13-17');
@@ -67,9 +65,6 @@ class RegistrationFormController extends Controller
         $pdf->cell('15');
         $pdf->Cell(170, 16, 'Community Sponsor ($250)');
         $pdf->CheckBox('reg_commsponsor', 16);
-        $pdf->cell('40');
-        $pdf->Cell(95, 16, 'Add-on (+$30)');
-        $pdf->CheckBox('breakfast', 16);
         $pdf->Ln(16);
 
         $pdf->Cell(155, 16, 'Adult  ($50) Until 1/31');
