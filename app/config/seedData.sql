@@ -3,6 +3,8 @@ INSERT INTO `badge_type` VALUES (1,'ADREGSTANDARD','Standard',NULL,NULL,NULL,NUL
 
 INSERT INTO `badge_status` VALUES (1,'NEW','New',1,NULL,NULL,NULL,NULL),(2,'PICKEDUP','Picked Up',1,NULL,NULL,NULL,NULL),(3,'LOST','Lost',0,NULL,NULL,NULL,NULL),(4,'REVOKED','Revoked',0,NULL,NULL,NULL,NULL);
 
+INSERT INTO `extra` VALUES ('SponsorBreakfast','Has purchased the Sunday sponsor breakfast.','2017-06-18 14:47:37','2017-06-18 14:47:37',1,1,1);
+
 INSERT INTO `registration_status` VALUES (1,'New','Newly registered.',1,NULL,NULL,NULL,NULL),(2,'PickedUp','Badge picked up.',1,NULL,NULL,NULL,NULL),(3,'Revoked','Registation revoked.',0,NULL,NULL,NULL,NULL),(4,'Refunded','Registration refunded.',0,NULL,NULL,NULL,NULL),(5,'RolledOver','Registation rolled over.',0,NULL,NULL,NULL,NULL),(6,'Transferred','Registration transferred and is now invalid.',0,NULL,NULL,NULL,NULL),(7,'Duplicate - Active','This Registration is a suspected duplicate Registration',1,NULL,NULL,NULL,NULL),(8,'Duplicate - Inactive','This Registration is a suspected duplicate badge, however is now a non-active registration',0,NULL,NULL,NULL,NULL),(9,'Imported','Imported from Old Database',0,1,'2017-06-09 00:00:00',1,'2017-06-09 00:00:00');
 
 INSERT INTO `registration_type` VALUES (1,'Online','Online Registration',NULL,NULL,NULL,NULL),(2,'Mail','Mail Registration',NULL,NULL,NULL,NULL),(3,'Group','Group Registration',NULL,NULL,NULL,NULL),(4,'Rollover','Rolled over the badge',NULL,NULL,NULL,NULL),(5,'Transfer','Registration received through transfer',NULL,NULL,NULL,NULL),(6,'Import','Imported through Old Database',1,'2017-06-09 00:00:00',1,'2017-06-09 00:00:00');
