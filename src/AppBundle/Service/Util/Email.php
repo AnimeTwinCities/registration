@@ -48,6 +48,11 @@ class Email
                 ->generateConfirmationNumber($registration);
         }
 
+        //FIXME: Disabled email sending for 2020. After the cancellation, we don't want accidental emails
+        if ($registration->getEvent()->getYear() == '2020') {
+            return;
+        }
+
         try {
             $this->sendConfirmationEmail($registration);
         } catch (\Exception $e) {
