@@ -86,6 +86,39 @@ class RegistrationRepository extends EntityRepository
     }
 
     /**
+     * @return Registration[]
+     */
+    public function findActiveRegistrations()
+    {
+        $event = $this->getEntityManager()->getRepository(Event::class)->getSelectedEvent();
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $registrationStatuses = $this->getEntityManager()
+            ->getRepository(RegistrationStatus::class)
+            ->findAllActive();
+        $queryBuilder->andWhere('r.registrationStatus IN (:registrationStatuses)')
+            ->setParameter('registrationStatuses', $registrationStatuses);
+
+        $queryBuilder->select('r')
+            ->from(Registration::class, 'r')
+            ->innerJoin('r.registrationStatus', 'rs')
+            ->innerJoin('r.event', 'e')
+
+            ->andWhere('r.event = :eventId')
+            ->setParameter('eventId', $event->getId())
+        ;
+
+        if (count($registrationStatuses) > 0) {
+            $queryBuilder->andWhere('r.registrationStatus IN (:registrationStatuses)')
+                ->setParameter('registrationStatuses', $registrationStatuses);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+
+    /**
      * @param String                $searchText
      * @param String                $page
      * @param RegistrationType|null $registrationType
