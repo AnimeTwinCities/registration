@@ -131,7 +131,7 @@ class Email
                 ->setSubject("Registration Ingest Error")
                 ->setFrom('noreply@animedetour.com', 'Anime Detour IT')
                 ->setReplyTo('ad_register@animedetour.com', 'Anime Detour Registration')
-                ->setTo($registration->getEmail())
+                ->setTo(['ad_register@animedetour.com', 'it@animedetour.com'])
                 ->setSender('noreply@animedetour.com')
                 ->setBody(
                     $this->templating->render(
@@ -161,7 +161,7 @@ class Email
             ->setSubject("Anime Detour 2020 Cancellation")
             ->setFrom('ad_register@animedetour.com', 'Anime Detour Registration')
             ->setReplyTo('ad_register@animedetour.com', 'Anime Detour Registration')
-            ->setTo(['ad_register@animedetour.com', 'it@animedetour.com'])
+            ->setTo($registration->getEmail())
             ->setSender('ad_register@animedetour.com')
             ->setBody(
                 $this->templating->render(
