@@ -94,12 +94,10 @@ class SendBulkMailCommand extends ContainerAwareCommand
             }
 
             // Only send to my regisration right now to test the run
-            if ($registration->getRegistrationId() == 56338) {
-                try {
-                    $mail->sendCancellationEmail($registration);
-                } catch (\Exception $e) {
-                    $errors[] = "{$registration->getRegistrationId()} => {$e->getMessage()}";
-                }
+            try {
+                $mail->sendCancellationEmail($registration);
+            } catch (\Exception $e) {
+                $errors[] = "{$registration->getRegistrationId()} => {$e->getMessage()}";
             }
             $sent++;
 
