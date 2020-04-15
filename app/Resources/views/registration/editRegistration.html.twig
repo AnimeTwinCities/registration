@@ -135,6 +135,11 @@
                         {{ 'EXHIBITOR' in currentBadgeTypes ? 'checked' : '' }}>
                     Exhibitor<br>
                 </label>
+                <label class="btn btn-primary btn-sm {{ 'ATCMEMBERSHIP' in currentBadgeTypes ? 'active' : '' }}">
+                    <input type="radio" name="badgeTypeName" value="ATCMEMBERSHIP"
+                        {{ 'ATCMEMBERSHIP' in currentBadgeTypes ? 'checked' : '' }}>
+                    ATC Only Membership<br>
+                </label>
             </div>
         </div>
     </div>

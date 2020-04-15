@@ -99,6 +99,17 @@ class ASecureCartController extends Controller
 
                     continue;
                 }
+                if (strpos($regType, 'ATCMEMBERSHIP') !== false) {
+                    $badgeStatus = $entityManager
+                        ->getRepository(BadgeStatus::class)
+                        ->getBadgeStatusFromStatus('ATC');
+                    if (!$badgeStatus) {
+                        $error = "BadgeStatus 'ATC' didn't exist. Configuration Error.";
+                        $this->createRegistrationError($error, $xmlPost);
+
+                        continue;
+                    }
+                }
 
                 $registrationType = $entityManager
                     ->getRepository(RegistrationType::class)
@@ -118,6 +129,17 @@ class ASecureCartController extends Controller
                     $this->createRegistrationError($error, $xmlPost);
 
                     continue;
+                }
+                if (strpos($regType, 'ATCMEMBERSHIP') !== false) {
+                    $registrationStatus = $entityManager
+                        ->getRepository(RegistrationStatus::class)
+                        ->getRegistrationStatusFromStatus('ATC');
+                    if (!$registrationStatus) {
+                        $error = "RegistrationStatus 'ATC' didn't exist. Configuration Error.";
+                        $this->createRegistrationError($error, $xmlPost);
+
+                        continue;
+                    }
                 }
 
                 /** @var Event $event */
