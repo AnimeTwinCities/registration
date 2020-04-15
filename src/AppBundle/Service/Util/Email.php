@@ -53,6 +53,11 @@ class Email
             return;
         }
 
+        if (!$registration->getRegistrationStatus()->getActive()) {
+            // Don't send emails on inactive registrations
+            return;
+        }
+
         try {
             $this->sendConfirmationEmail($registration);
         } catch (\Exception $e) {
@@ -72,6 +77,9 @@ class Email
             /* @var Badge $badge */
             $badgeType = $badge->getBadgetype()->getName();
             switch ($badgeType) {
+                case 'ATCMEMBERSHIP':
+                    // FIXME: TODO: Send thank you for your membership email
+                    return;
                 case 'MINOR':
                     $is_minor = true;
                     break;

@@ -441,6 +441,8 @@ class EditRegistrationController extends Controller
         $returnJson['success'] = false;
         $returnJson['Year'] = $event->getYear();
 
+        $badgeTypeName = $request->request->get('badgeTypeName');
+
         $all_fields_sent = true;
         $fields = array(
             'lastName' => 'last name',
@@ -510,6 +512,14 @@ class EditRegistrationController extends Controller
 
         $registrationStatus = $this->getDoctrine()->getRepository(RegistrationStatus::class)
             ->getRegistrationStatusFromStatus($request->request->get('RegistrationStatus'));
+        if (strpos($badgeTypeName, 'ATCMEMBERSHIP') !== false) {
+            $registrationStatus = $this->getDoctrine()->getRepository(RegistrationStatus::class)
+                ->getRegistrationStatusFromStatus('ATC');
+            if (!$registrationStatus) {
+                $all_fields_sent = false;
+                $returnJson['message'] = "RegistrationStatus 'ATC' didn't exist. Configuration Error.";
+            }
+        }
         if (!$registrationStatus) {
             $all_fields_sent = false;
             $returnJson['message'] = "RegistrationStatus '{$request->request->get('RegistrationStatus')}' didn't exist. Configuration Error.";
@@ -633,12 +643,12 @@ class EditRegistrationController extends Controller
                 'ADREGCOMMSPONSOR',
                 'GUEST',
                 'VENDOR',
-                'EXHIBITOR'
+                'EXHIBITOR',
+                'ATCMEMBERSHIP',
             );
 
             $toDelete = [];
             $badgetypeFound = false;
-            $badgeTypeName = $request->request->get('badgeTypeName');
 
             $badges = $registration->getBadges();
             foreach ($badges as $badge) {
@@ -729,6 +739,10 @@ class EditRegistrationController extends Controller
 
                 $badgeStatus = $this->getDoctrine()->getRepository(BadgeStatus::class)
                     ->getBadgeStatusFromStatus('NEW');
+                if (strpos($badgeTypeName, 'ATCMEMBERSHIP') !== false) {
+                    $badgeStatus = $this->getDoctrine()->getRepository(BadgeStatus::class)
+                        ->getBadgeStatusFromStatus('ATC');
+                }
                 $badgeType = $this->getDoctrine()->getRepository(BadgeType::class)
                     ->getBadgeTypeFromType($badgeTypeName);
                 $badge = new Badge();
@@ -742,7 +756,10 @@ class EditRegistrationController extends Controller
                 $entityManager->flush();
             }
 
-            $this->get('util_email')->generateAndSendConfirmationEmail($registration);
+            if (strpos($badgeTypeName, 'ATCMEMBERSHIP') === false) {
+                // Do not send for ATC Memberships
+                $this->get('util_email')->generateAndSendConfirmationEmail($registration);
+            }
 
             $registrationHistory = new History();
             $registrationHistory->setRegistration($registration);
