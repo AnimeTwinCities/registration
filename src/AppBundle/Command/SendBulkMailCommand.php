@@ -105,7 +105,8 @@ class SendBulkMailCommand extends ContainerAwareCommand
                 $output->write(['.']);
                 // We need to throttle so we don't overload our limits with AWS
                 // Current limit is 14 emails a second. So stopping at 10 just to make sure
-                sleep(1);
+                // Sleeping extra 4 seconds, because of issues when sleep was 1 second
+                sleep(5);
             }
         }
 
