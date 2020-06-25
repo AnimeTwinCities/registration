@@ -48,11 +48,6 @@ class Email
                 ->generateConfirmationNumber($registration);
         }
 
-        //FIXME: Disabled email sending for 2020. After the cancellation, we don't want accidental emails
-        if ($registration->getEvent()->getYear() == '2020') {
-            return;
-        }
-
         if (!$registration->getRegistrationStatus()->getActive()) {
             // Don't send emails on inactive registrations
             return;
