@@ -46,7 +46,7 @@ class CreatedModifiedFields
 
         $user = $args->getEntityManager()->getRepository('AppBundle:User')->find($userId);
         if (!$user) {
-            return;
+            $user = $args->getEntityManager()->getRepository(User::class)->find(1);
         }
 
         $entity->setCreatedDate(new \DateTime("now"));
@@ -65,12 +65,19 @@ class CreatedModifiedFields
         }
 
         $userId = 1; // Default to 1 if not logged in. So the APIs that insert users will have an id.
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $token = $this->container->get('security.token_storage')->getToken();
+        if (!$token) {
+            return;
+        }
+        $user = $token->getUser();
         if ($user instanceof User) {
             $userId = $user->getId();
         }
 
         $user = $args->getEntityManager()->getRepository('AppBundle:User')->find($userId);
+        if (!$user) {
+            $user = $args->getEntityManager()->getRepository(User::class)->find(1);
+        }
 
         $entity->setModifiedDate(new \DateTime("now"));
         $entity->setModifiedBy($user);

@@ -17,6 +17,7 @@ use AppBundle\Entity\Registration;
 use AppBundle\Entity\RegistrationShirt;
 use AppBundle\Entity\RegistrationStatus;
 use AppBundle\Entity\RegistrationType;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,7 +66,6 @@ class BulkRolloverCommand extends ContainerAwareCommand
     {
         $start = microtime(true);
         $doctrine = $this->getContainer()->get('doctrine');
-        $mail = $this->getContainer()->get('util_email');
 
         /** @var Registration[] $registrations */
         $registrations = $doctrine
@@ -74,11 +74,11 @@ class BulkRolloverCommand extends ContainerAwareCommand
 
 
         $output->writeln([
-            'Email Cancellation sender',
+            '2020 Rollover Script',
             '============',
             'Found ' . count($registrations) . ' registrations',
             '',
-            'Starting email sending: ',
+            'Starting rollovers and confirmation email sending: ',
         ]);
 
         $sent = 0;
@@ -104,7 +104,7 @@ class BulkRolloverCommand extends ContainerAwareCommand
                 // We need to throttle so we don't overload our limits with AWS
                 // Current limit is 14 emails a second. So stopping at 10 just to make sure
                 // Sleeping extra 4 seconds, because of issues when sleep was 1 second
-                sleep(5);
+                //sleep(5);
             }
         }
 
@@ -136,7 +136,7 @@ class BulkRolloverCommand extends ContainerAwareCommand
      * @throws Exception
      */
     public function rolloverRegistration(Registration $oldRegistration) {
-        $entityManager = $this->getContainer()->get('doctrine');
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $registrationType = $entityManager
             ->getRepository(RegistrationType::class)
@@ -217,14 +217,14 @@ class BulkRolloverCommand extends ContainerAwareCommand
         }
         $entityManager->flush();
 
-        $this->getContainer()->get('util_email')->generateAndSendConfirmationEmail($registration);
+        $this->getContainer()->get('util_email')->sendBulkRolloverEmailTwentyTwenty($registration);
 
         $registrationHistory = new History();
         $registrationHistory->setRegistration($registration);
-        $url = $this->getContainer()->get('router')->generateUrl('viewRegistration', ['registrationId' => $oldRegistration->getRegistrationId()]);
+        $url = $this->getContainer()->get('router')->generate('viewRegistration', ['registrationId' => $oldRegistration->getRegistrationId()]);
         $history = " Transferred From <a href='$url'>"
             . $oldRegistration->getEvent()->getYear() . '</a>. <br>';
-        $registrationHistory->setChangetext($history . '<br>Registration created from Rolled-over');
+        $registrationHistory->setChangetext($history . '<br>Registration created from 2020 Bulk Rolled-over');
         $entityManager->persist($registrationHistory);
 
         $oldRegistration->setTransferredTo($registration);
@@ -234,10 +234,10 @@ class BulkRolloverCommand extends ContainerAwareCommand
 
         $registrationHistory = new History();
         $registrationHistory->setRegistration($oldRegistration);
-        $url = $this->getContainer()->get('router')->generateUrl('viewRegistration', ['registrationId' => $registration->getRegistrationId()]);
+        $url = $this->getContainer()->get('router')->generate('viewRegistration', ['registrationId' => $registration->getRegistrationId()]);
         $oldHistory .= " Transferred To <a href='$url'>"
             . $registration->getEvent()->getYear() . '</a>. <br>';
-        $registrationHistory->setChangetext($oldHistory . '<br>Registration Rolled-over');
+        $registrationHistory->setChangetext($oldHistory . '<br>Registration 2020 Bulk Rolled-over');
         $entityManager->persist($registrationHistory);
         $entityManager->flush();
 
