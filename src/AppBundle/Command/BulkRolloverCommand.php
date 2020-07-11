@@ -220,7 +220,7 @@ class BulkRolloverCommand extends ContainerAwareCommand
         }
         $entityManager->flush();
 
-        $this->getContainer()->get('util_email')->sendCancellationEmail($registration);
+        $this->getContainer()->get('util_email')->sendBulkRolloverEmailTwentyTwenty($registration);
 
         $registrationHistory = new History();
         $registrationHistory->setRegistration($registration);

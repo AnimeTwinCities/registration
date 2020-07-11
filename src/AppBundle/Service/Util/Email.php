@@ -178,6 +178,7 @@ class Email
 
     /**
      * @param Registration|null $registration
+     * @return bool
      * @throws \Exception
      */
     public function sendBulkRolloverEmailTwentyTwenty(Registration $registration = null) {
@@ -211,6 +212,6 @@ class Email
                 'text/html'
             )
         ;
-        $this->mailer->send($message);
+        return (bool) $this->mailer->send($message);
     }
 }
