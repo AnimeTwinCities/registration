@@ -91,6 +91,14 @@ class BulkRolloverCommand extends ContainerAwareCommand
         $skipped = 0;
         $errors = [];
         foreach ($registrations as $registration) {
+            $badges = $registration->getBadges();
+            foreach ($badges as $badge) {
+                // Status 2 is picked up
+                if ($badge->getBadgeStatus()->getBadgeStatusId() == 2) {
+                    continue;
+                }
+            }
+
             $didRollover = false;
             try {
                 $didRollover = $this->rolloverRegistration($registration);
