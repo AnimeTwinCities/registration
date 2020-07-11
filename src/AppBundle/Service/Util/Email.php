@@ -151,7 +151,6 @@ class Email
     }
 
     /**
-     * @param $error
      * @param Registration|null $registration
      * @throws \Exception
      */
@@ -178,7 +177,6 @@ class Email
     }
 
     /**
-     * @param $error
      * @param Registration|null $registration
      * @throws \Exception
      */
@@ -204,7 +202,7 @@ class Email
             ->setFrom('ad_register@animedetour.com', 'Anime Detour Registration')
             ->setReplyTo('ad_register@animedetour.com', 'Anime Detour Registration')
             ->setTo($registration->getEmail())
-            ->setSender('ad_register@animedetour.com')
+            ->setSender('ad_register@animedetour.com', 'Anime Detour Registration')
             ->setBody(
                 $this->templating->render(
                     'email/rollover2020.html.twig',

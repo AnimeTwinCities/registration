@@ -72,6 +72,11 @@ class BulkRolloverCommand extends ContainerAwareCommand
             ->getRepository(Registration::class)
             ->findActiveRegistrations();
 
+        try {
+            $email = $this->getContainer()->get('util_email');
+        } catch (\Exception $e) {
+            //
+        }
 
         $output->writeln([
             '2020 Rollover Script',
@@ -83,8 +88,6 @@ class BulkRolloverCommand extends ContainerAwareCommand
 
         $sent = 0;
         $skipped = 0;
-        $groups = 0;
-        $missingEmail = 0;
         $errors = [];
         foreach ($registrations as $registration) {
             $didRollover = false;
@@ -104,7 +107,7 @@ class BulkRolloverCommand extends ContainerAwareCommand
                 // We need to throttle so we don't overload our limits with AWS
                 // Current limit is 14 emails a second. So stopping at 10 just to make sure
                 // Sleeping extra 4 seconds, because of issues when sleep was 1 second
-                //sleep(5);
+                sleep(5);
             }
         }
 
@@ -217,7 +220,7 @@ class BulkRolloverCommand extends ContainerAwareCommand
         }
         $entityManager->flush();
 
-        $this->getContainer()->get('util_email')->sendBulkRolloverEmailTwentyTwenty($registration);
+        $this->getContainer()->get('util_email')->sendCancellationEmail($registration);
 
         $registrationHistory = new History();
         $registrationHistory->setRegistration($registration);
@@ -241,7 +244,6 @@ class BulkRolloverCommand extends ContainerAwareCommand
         $entityManager->persist($registrationHistory);
         $entityManager->flush();
 
-        $params = ['registrationId' => $oldRegistration->getRegistrationId()];
         return true;
     }
 }
