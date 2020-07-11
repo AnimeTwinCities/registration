@@ -48,11 +48,6 @@ class Email
                 ->generateConfirmationNumber($registration);
         }
 
-        //FIXME: Disabled email sending for 2020. After the cancellation, we don't want accidental emails
-        if ($registration->getEvent()->getYear() == '2020') {
-            return;
-        }
-
         if (!$registration->getRegistrationStatus()->getActive()) {
             // Don't send emails on inactive registrations
             return;
@@ -156,7 +151,6 @@ class Email
     }
 
     /**
-     * @param $error
      * @param Registration|null $registration
      * @throws \Exception
      */
@@ -180,5 +174,44 @@ class Email
             )
         ;
         $this->mailer->send($message);
+    }
+
+    /**
+     * @param Registration|null $registration
+     * @return bool
+     * @throws \Exception
+     */
+    public function sendBulkRolloverEmailTwentyTwenty(Registration $registration = null) {
+        if ($registration->getConfirmationnumber() == '') {
+            $this
+                ->entityManager
+                ->getRepository(Registration::class)
+                ->generateConfirmationNumber($registration);
+        }
+
+        if (!$registration->getRegistrationStatus()->getActive()) {
+            // Don't send emails on inactive registrations
+            return;
+        }
+
+        $options = [
+            'registration' => $registration,
+        ];
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject("Anime Detour 2020 Registration Rolled Over")
+            ->setFrom('ad_register@animedetour.com', 'Anime Detour Registration')
+            ->setReplyTo('ad_register@animedetour.com', 'Anime Detour Registration')
+            ->setTo($registration->getEmail())
+            ->setSender('ad_register@animedetour.com', 'Anime Detour Registration')
+            ->setBody(
+                $this->templating->render(
+                    'email/rollover2020.html.twig',
+                    $options
+                ),
+                'text/html'
+            )
+        ;
+        return (bool) $this->mailer->send($message);
     }
 }
