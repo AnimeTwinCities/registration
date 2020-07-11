@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TestEmailConfirmation extends ContainerAwareCommand
+class TestEmailConfirmationCommand extends ContainerAwareCommand
 {
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:test-send-mail';
@@ -38,11 +38,11 @@ class TestEmailConfirmation extends ContainerAwareCommand
     {
         $this
             // the short description shown while running "php bin/console list"
-            ->setDescription('Rolls over all registrations in 2020 and sends them a confirmation email for 2021.')
+            ->setDescription('Tests a rollover 2020 email. Only uses a hardcoded registration.')
 
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('Allows bulk rollover all registrations not refunded or picked up')
+            ->setHelp('Tests to make sure email works')
 
 
             ->addArgument('password', $this->confirmSend ? InputArgument::REQUIRED : InputArgument::OPTIONAL, 'Should we send this')
