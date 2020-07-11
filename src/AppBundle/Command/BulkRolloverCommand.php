@@ -6,6 +6,7 @@
  *
  * See the LICENSE file in the root of this project for details.
  */
+declare(strict_types=1);
 
 namespace AppBundle\Command;
 

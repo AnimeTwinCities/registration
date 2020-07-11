@@ -6,19 +6,12 @@
  *
  * See the LICENSE file in the root of this project for details.
  */
+declare(strict_types=1);
 
-namespace AppBundle\Controller\Registration;
+namespace AppBundle\Command;
 
 
-use AppBundle\Entity\Badge;
-use AppBundle\Entity\Event;
-use AppBundle\Entity\Group;
-use AppBundle\Entity\History;
 use AppBundle\Entity\Registration;
-use AppBundle\Entity\RegistrationShirt;
-use AppBundle\Entity\RegistrationStatus;
-use AppBundle\Entity\RegistrationType;
-use AppBundle\Repository\RegistrationRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
