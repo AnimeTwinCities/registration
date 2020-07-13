@@ -61,11 +61,9 @@ class TestEmailConfirmationCommand extends ContainerAwareCommand
         $doctrine = $this->getContainer()->get('doctrine');
 
         /** @var Registration[] $registrations */
-        $registrations = [
-            $doctrine
+        $registrations = $doctrine
             ->getRepository(Registration::class)
-            ->find(56338)
-        ];
+            ->findActiveRegistrations();
 
         try {
             $email = $this->getContainer()->get('util_email');
@@ -78,16 +76,22 @@ class TestEmailConfirmationCommand extends ContainerAwareCommand
             '============',
             'Found ' . count($registrations) . ' registrations',
             '',
-            'Starting rollovers and confirmation email sending: ',
+            'Starting rollovers confirmation email sending: ',
         ]);
 
         $sent = 0;
         $skipped = 0;
         $errors = [];
         foreach ($registrations as $registration) {
+            if ($registration->getRegistrationType()->getRegistrationTypeId() != 4) {
+                $skipped++;
+
+                continue;
+            }
+
             $didRollover = false;
             try {
-                $didRollover = $this->rolloverRegistration($registration);
+                $didRollover = $this->getContainer()->get('util_email')->sendBulkRolloverEmailTwentyTwenty($registration);
             } catch (\Exception $e) {
                 $errors[] = "{$registration->getRegistrationId()} => {$e->getMessage()}";
             }
@@ -126,13 +130,5 @@ class TestEmailConfirmationCommand extends ContainerAwareCommand
 
         $output->writeln(['Completed run.','']);
 
-    }
-
-    /**
-     * @param Registration $oldRegistration
-     * @return bool
-     */
-    public function rolloverRegistration(Registration $oldRegistration) {
-        return $this->getContainer()->get('util_email')->sendBulkRolloverEmailTwentyTwenty($oldRegistration);
     }
 }
