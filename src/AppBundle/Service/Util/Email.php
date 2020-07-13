@@ -191,7 +191,7 @@ class Email
 
         if (!$registration->getRegistrationStatus()->getActive()) {
             // Don't send emails on inactive registrations
-            return;
+            return false;
         }
 
         $options = [

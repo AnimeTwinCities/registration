@@ -95,7 +95,8 @@ class BulkRolloverCommand extends ContainerAwareCommand
             foreach ($badges as $badge) {
                 // Status 2 is picked up
                 if ($badge->getBadgeStatus()->getBadgeStatusId() == 2) {
-                    continue;
+                    $skipped++;
+                    continue 2;
                 }
             }
 
