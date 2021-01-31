@@ -206,7 +206,7 @@ class Email
             ->setSender('ad_register@animedetour.com', 'Anime Detour Registration')
             ->setBody(
                 $this->templating->render(
-                    'email/cancelled2021.html.twig',
+                    'email/rollover2021.html.twig',
                     $options
                 ),
                 'text/html'
